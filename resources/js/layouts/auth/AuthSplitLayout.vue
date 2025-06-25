@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { Link, usePage } from '@inertiajs/vue3';
+import { HandCoinsIcon } from 'lucide-vue-next';
 
 const page = usePage();
 const name = page.props.name;
@@ -17,7 +17,7 @@ defineProps<{
         <div class="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
             <div class="absolute inset-0 bg-zinc-900" />
             <Link :href="route('home')" class="relative z-20 flex items-center text-lg font-medium">
-                <AppLogoIcon class="mr-2 size-8 fill-current text-white" />
+                <HandCoinsIcon class="text-white-500 h-8 w-8" />
                 {{ name }}
             </Link>
             <div v-if="quote" class="relative z-20 mt-auto">
