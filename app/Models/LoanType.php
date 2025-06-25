@@ -20,4 +20,9 @@ class LoanType extends Model
     {
         return $this->hasMany(Loan::class);
     }
+
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class);
+    }
 }

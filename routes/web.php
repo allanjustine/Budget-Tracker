@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountWalletController;
 use App\Http\Controllers\BankTypeController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\LoanTypeController;
@@ -13,11 +14,7 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(fn() => [
+Route::middleware(['auth', 'verified'])->group(fn() => [
     Route::resource('bank-types', BankTypeController::class),
 
     Route::resource('loan-types', LoanTypeController::class),
@@ -26,9 +23,13 @@ Route::middleware('auth')->group(fn() => [
 
     Route::resource('account-wallets', AccountWalletController::class),
 
-    Route::resource('loan-wallets', LoanWalletController::class),
+    Route::resource('loans', LoanWalletController::class),
 
     Route::resource('expenses', ExpenseController::class),
+
+    Route::controller(DashboardController::class)->group(fn() => [
+        Route::get('dashboard', 'index')->name('dashboard'),
+    ]),
 
 ]);
 

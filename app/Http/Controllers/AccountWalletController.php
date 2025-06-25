@@ -17,6 +17,7 @@ class AccountWalletController extends Controller
     {
 
         $accountWallets = Wallet::with('bankType')
+            ->where('user_id', Auth::id())
             ->latest()
             ->get();
 
@@ -41,21 +42,41 @@ class AccountWalletController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'bank_type_id'              => ['required', 'exists:bank_types,id'],
-            'amount'                    => ['required', 'numeric', 'min:1']
-        ], [
-            'bank_type_id.required'     => 'Bank type is required',
-            'bank_type_id.exists'       => 'Selected bank type does not exist',
-            'amount.required'           => 'Amount is required',
-            'amount.numeric'            => 'Amount must be a number',
-            'amount.min'                => 'Amount must be greater than 1'
-        ]);
+        if ($request->bank_type_id === 'others') {
+            $request->validate([
+                'bank_type_others'              => ['required'],
+                'amount'                        => ['required', 'numeric', 'min:1']
+            ], [
+                'bank_type_others.required'     => 'Please specify the other bank type.',
+                'amount.required'               => 'Amount is required',
+                'amount.numeric'                => 'Amount must be a number',
+                'amount.min'                    => 'Amount must be greater than 1'
+            ]);
+
+            $bankType = BankType::firstOrCreate([
+                'name'                          => $request->bank_type_others,
+            ]);
+
+            $bankTypeId = $bankType->id;
+        } else {
+            $request->validate([
+                'bank_type_id'                  => ['required', 'exists:bank_types,id'],
+                'amount'                        => ['required', 'numeric', 'min:1']
+            ], [
+                'bank_type_id.required'         => 'Bank type is required',
+                'bank_type_id.exists'           => 'Selected bank type does not exist',
+                'amount.required'               => 'Amount is required',
+                'amount.numeric'                => 'Amount must be a number',
+                'amount.min'                    => 'Amount must be greater than 1'
+            ]);
+
+            $bankTypeId = $request->bank_type_id;
+        }
 
         $wallet = Wallet::create([
-            'user_id'                   => Auth::id(),
-            'bank_type_id'              => $request->bank_type_id,
-            'amount'                    => $request->amount
+            'user_id'                           => Auth::id(),
+            'bank_type_id'                      => $bankTypeId,
+            'amount'                            => $request->amount
         ]);
 
         return to_route('account-wallets.index')->with('success', "Your wallet balance {$wallet->amount} amount using {$wallet->bankType->name} added successfully");
@@ -84,20 +105,40 @@ class AccountWalletController extends Controller
     {
         $wallet = Wallet::findOrFail($id);
 
-        $request->validate([
-            'bank_type_id'              => ['required', 'exists:bank_types,id'],
-            'amount'                    => ['required', 'numeric', 'min:1']
-        ], [
-            'bank_type_id.required'     => 'Bank type is required',
-            'bank_type_id.exists'       => 'Selected bank type does not exist',
-            'amount.required'           => 'Amount is required',
-            'amount.numeric'            => 'Amount must be a number',
-            'amount.min'                => 'Amount must be greater than 1'
-        ]);
+        if ($request->bank_type_id === 'others') {
+            $request->validate([
+                'bank_type_others'              => ['required'],
+                'amount'                        => ['required', 'numeric', 'min:1']
+            ], [
+                'bank_type_others.required'     => 'Please specify the other bank type.',
+                'amount.required'               => 'Amount is required',
+                'amount.numeric'                => 'Amount must be a number',
+                'amount.min'                    => 'Amount must be greater than 1'
+            ]);
+
+            $bankType = BankType::firstOrCreate([
+                'name'                          => $request->bank_type_others,
+            ]);
+
+            $bankTypeId = $bankType->id;
+        } else {
+            $request->validate([
+                'bank_type_id'                  => ['required', 'exists:bank_types,id'],
+                'amount'                        => ['required', 'numeric', 'min:1']
+            ], [
+                'bank_type_id.required'         => 'Bank type is required',
+                'bank_type_id.exists'           => 'Selected bank type does not exist',
+                'amount.required'               => 'Amount is required',
+                'amount.numeric'                => 'Amount must be a number',
+                'amount.min'                    => 'Amount must be greater than 1'
+            ]);
+
+            $bankTypeId = $request->bank_type_id;
+        }
 
         $wallet->update([
-            'bank_type_id'              => $request->bank_type_id,
-            'amount'                    => $request->amount
+            'bank_type_id'                      => $bankTypeId,
+            'amount'                            => $request->amount
         ]);
 
         return to_route('account-wallets.index')->with('success', "Your wallet balance {$wallet->amount} amount using {$wallet->bankType->name} updated successfully");

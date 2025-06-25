@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Wallet extends Model
 {
@@ -16,5 +17,11 @@ class Wallet extends Model
     public function bankType()
     {
         return $this->belongsTo(BankType::class);
+    }
+
+    public static function totalBalance()
+    {
+        return self::where('user_id', Auth::id())
+            ->sum('amount');
     }
 }

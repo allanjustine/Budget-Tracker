@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Expense extends Model
 {
@@ -21,5 +22,29 @@ class Expense extends Model
     public function bankType()
     {
         return $this->belongsTo(BankType::class);
+    }
+
+    public function loanType()
+    {
+        return $this->belongsTo(LoanType::class);
+    }
+
+    public function loan()
+    {
+        return $this->belongsTo(Loan::class);
+    }
+
+    public static function totalBalance()
+    {
+        return self::where('user_id', Auth::id())
+            ->sum('amount');
+    }
+
+    public static function totalLoanExpenseBalance()
+    {
+        return self::where('user_id', Auth::id())
+            ->whereHas('loanType')
+            ->whereHas('loan')
+            ->sum('amount');
     }
 }

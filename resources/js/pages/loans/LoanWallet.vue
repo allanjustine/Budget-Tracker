@@ -16,32 +16,34 @@ import { toast } from 'vue-sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Account Wallet',
-        href: '/account-wallets',
+        title: 'Loan Wallet',
+        href: '/loans',
     },
 ];
 
-const { accountWallets } = defineProps({
-    accountWallets: Object,
+defineProps({
+    loanWallets: Object,
     bankTypes: Object,
+    loanTypes: Object,
 });
 
-const tableHeads = ['ID', 'Amount', 'Bank Type', 'Created At', 'Action'];
+const tableHeads = ['ID', 'Amount', 'Bank Type', 'Loan Type', 'Created At', 'Action'];
 
 const form = useForm({
     amount: 0,
     bank_type_id: '',
     bank_type_others: '',
+    loan_type_id: '',
 });
 
 const modalOpen = ref(false);
 
 const editModalOpen = ref(false);
 
-const selectedAccountWallet: any = ref(null);
+const selectedLoanWallet: any = ref(null);
 
 function submit() {
-    form.post(route('account-wallets.store'), {
+    form.post(route('loans.store'), {
         onSuccess: (page) => {
             const { success, error }: any = page.props.flash;
 
@@ -58,8 +60,8 @@ function submit() {
     });
 }
 
-const deleteAccountWallet = (id: number) => {
-    form.delete(route('account-wallets.destroy', id), {
+const deleteLoanWallet = (id: number) => {
+    form.delete(route('loans.destroy', id), {
         onSuccess: (page) => {
             const { success, error }: any = page.props.flash;
 
@@ -71,16 +73,17 @@ const deleteAccountWallet = (id: number) => {
         },
     });
 };
-const handleEdit = (accountWallet: any) => {
-    form.amount = accountWallet.amount;
-    form.bank_type_id = accountWallet.bank_type_id;
-    selectedAccountWallet.value = accountWallet;
+const handleEdit = (loanWallet: any) => {
+    form.amount = loanWallet.amount;
+    form.bank_type_id = loanWallet.bank_type_id;
+    form.loan_type_id = loanWallet.loan_type_id;
+    selectedLoanWallet.value = loanWallet;
     form.errors = {};
     editModalOpen.value = true;
 };
 
 const handleUpdate = () => {
-    form.patch(route('account-wallets.update', selectedAccountWallet.value.id), {
+    form.patch(route('loans.update', selectedLoanWallet.value.id), {
         onSuccess: (page) => {
             const { success, error }: any = page.props.flash;
 
@@ -103,27 +106,31 @@ const handleOpenModal = () => {
     modalOpen.value = true;
 };
 
-watch(
-    () => form.bank_type_id,
-    (newValue) => {
-        if (newValue !== 'others') {
-            form.bank_type_others = '';
-            form.errors.bank_type_others = '';
-        }
-    },
-);
+function resetIfOthers(fieldItem: string, fieldOthers: string) {
+    watch(
+        () => (form as any)[fieldItem],
+        (newValue) => {
+            if (newValue !== 'others') {
+                (form as any)[fieldOthers] = '';
+                (form as any).errors[fieldOthers] = '';
+            }
+        },
+    );
+}
+
+resetIfOthers('bank_type_id', 'bank_type_others');
 </script>
 
 <template>
-    <Head title="Account Wallet" />
+    <Head title="Loan Wallet" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="p-5">
             <div class="w-full">
                 <Dialog v-model:open="modalOpen">
-                    <Button class="float-end bg-blue-500 text-white hover:bg-blue-600" @click="handleOpenModal"><Plus /> Add Account Wallet</Button>
+                    <Button class="float-end bg-blue-500 text-white hover:bg-blue-600" @click="handleOpenModal"><Plus /> Add Loan Wallet</Button>
                     <DialogContent class="sm:max-w-[425px]">
                         <DialogHeader>
-                            <DialogTitle>Add Account Wallet</DialogTitle>
+                            <DialogTitle>Add Loan Wallet</DialogTitle>
                         </DialogHeader>
                         <form @submit.prevent="submit" class="space-y-4">
                             <div class="space-y-2">
@@ -136,6 +143,20 @@ watch(
                                     v-model="form.amount"
                                 />
                                 <InputError :message="form.errors.amount" />
+                            </div>
+                            <div class="space-y-2">
+                                <Label for="loan_type" class="text-right"> Loan Type </Label>
+                                <Select v-model="form.loan_type_id">
+                                    <SelectTrigger class="w-full">
+                                        <SelectValue placeholder="Select loan type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem v-for="(loanType, index) in loanTypes" :key="index" :value="loanType.id">
+                                            {{ loanType.name }}
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <InputError :message="form.errors.loan_type_id" />
                             </div>
                             <div class="space-y-2">
                                 <Label for="bank_type" class="text-right"> Bank Type </Label>
@@ -182,26 +203,26 @@ watch(
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow v-for="(accountWallet, index) in accountWallets" :key="index">
-                        <TableCell> {{ accountWallet.id }}</TableCell>
-                        <TableCell> {{ Number(accountWallet.amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }} </TableCell>
-                        <TableCell> {{ accountWallet?.bank_type?.name }}</TableCell>
-                        <TableCell> {{ format(accountWallet.created_at, 'MMM dd, yyyy hh:mm a') }}</TableCell>
+                    <TableRow v-for="(loanWallet, index) in loanWallets" :key="index">
+                        <TableCell> {{ loanWallet.id }}</TableCell>
+                        <TableCell> {{ Number(loanWallet.amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }} </TableCell>
+                        <TableCell> {{ loanWallet?.bank_type?.name }}</TableCell>
+                        <TableCell class="capitalize"> {{ loanWallet?.loan_type?.name }}</TableCell>
+                        <TableCell> {{ format(loanWallet.created_at, 'MMM dd, yyyy hh:mm a') }}</TableCell>
                         <TableCell class="flex gap-2">
-                            <Button class="bg-blue-500 text-white hover:bg-blue-600" @click="handleEdit(accountWallet)"><PenBoxIcon /></Button>
-                            <Button @click="deleteAccountWallet(accountWallet.id)" class="bg-red-500 text-white hover:bg-red-600"
-                                ><TrashIcon />
-                            </Button>
+                            <Button class="bg-blue-500 text-white hover:bg-blue-600" @click="handleEdit(loanWallet)"><PenBoxIcon /></Button>
+                            <Button @click="deleteLoanWallet(loanWallet.id)" class="bg-red-500 text-white hover:bg-red-600"><TrashIcon /> </Button>
                         </TableCell>
                     </TableRow>
-                    <TableRow v-if="accountWallets?.length === 0">
-                        <TableCell colspan="5" class="text-center">No account wallet found.</TableCell>
+                    <TableRow v-if="loanWallets?.length === 0">
+                        <TableCell colspan="6" class="text-center">No loan wallet found.</TableCell>
                     </TableRow>
                     <Dialog v-model:open="editModalOpen">
                         <DialogContent class="sm:max-w-[425px]">
                             <DialogHeader>
                                 <DialogTitle
-                                    >Editing {{ selectedAccountWallet?.amount }} ({{ selectedAccountWallet?.bank_type?.name }})...</DialogTitle
+                                    >Editing {{ selectedLoanWallet?.amount }} ({{ selectedLoanWallet?.bank_type?.name }} -
+                                    {{ selectedLoanWallet?.loan_type?.name }})...</DialogTitle
                                 >
                             </DialogHeader>
                             <form @submit.prevent="handleUpdate" class="space-y-4">
@@ -215,6 +236,20 @@ watch(
                                         v-model="form.amount"
                                     />
                                     <InputError :message="form.errors.amount" />
+                                </div>
+                                <div class="space-y-2">
+                                    <Label for="loan_type" class="text-right"> Loan Type </Label>
+                                    <Select v-model="form.loan_type_id">
+                                        <SelectTrigger class="w-full">
+                                            <SelectValue placeholder="Select loan type" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem v-for="(loanType, index) in loanTypes" :key="index" :value="loanType.id">
+                                                {{ loanType.name }}
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <InputError :message="form.errors.loan_type_id" />
                                 </div>
                                 <div class="space-y-2">
                                     <Label for="bank_type" class="text-right"> Bank Type </Label>
@@ -231,7 +266,6 @@ watch(
                                     </Select>
                                     <InputError :message="form.errors.bank_type_id" />
                                 </div>
-
                                 <div class="space-y-2" v-if="form.bank_type_id === 'others'">
                                     <Label for="bank_type" class="text-right"> Bank Type Others </Label>
                                     <Input

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('bank_type_id')->constrained()->cascadeOnDelete();
             $table->foreignId('expense_category_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('loan_type_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('loan_id')->nullable()->constrained()->cascadeOnDelete();
             $table->decimal('amount', 8, 2)->default(0);
             $table->timestamps();
         });

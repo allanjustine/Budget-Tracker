@@ -34,7 +34,7 @@ class ExpenseCategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'              => ['required', 'min:1', 'unique:loan_types,name']
+            'name'              => ['required', 'min:1', 'unique:expense_categories,name']
         ], [
             'name.required'     => 'Loan name is required'
         ]);
@@ -71,7 +71,7 @@ class ExpenseCategoryController extends Controller
         $expenseCategory = ExpenseCategory::findOrFail($id);
 
         $request->validate([
-            'name'              => ['required', 'min:1', "unique:loan_types,name,{$expenseCategory->id}"]
+            'name'              => ['required', 'min:1', "unique:expense_categories,name,{$expenseCategory->id}"]
         ], [
             'name.required'     => 'Loan name is required'
         ]);
