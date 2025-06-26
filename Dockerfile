@@ -24,6 +24,9 @@ WORKDIR /var/www
 # Copy app files
 COPY . .
 
+# NPM INSTALL & BUILD
+RUN npm install && npm run build
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
