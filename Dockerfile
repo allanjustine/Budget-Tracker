@@ -19,7 +19,7 @@ COPY . .
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Install Node.js dependencies
-RUN npm install
+RUN npm install -g vite
 
 # Fix permissions (Laravel)
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
