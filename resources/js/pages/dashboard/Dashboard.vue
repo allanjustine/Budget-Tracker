@@ -157,6 +157,9 @@ watch(
                                 }}</span>
                             </div>
                         </div>
+                        <div v-if="walletDetails?.length === 0" class="text-center">
+                            <span class="text-gray-400">No wallet found</span>
+                        </div>
                     </div>
                     <div class="h-fit rounded-lg border p-2">
                         <h2 class="mb-3 text-center text-lg font-bold">Expense Details</h2>
@@ -190,6 +193,9 @@ watch(
                                 }}</span>
                             </div>
                         </div>
+                        <div v-if="expenseDetails?.length === 0" class="text-center">
+                            <span class="text-gray-400">No wallet found</span>
+                        </div>
                     </div>
                     <div class="h-fit rounded-lg border p-2">
                         <h2 class="mb-3 text-center text-lg font-bold">Loan Details</h2>
@@ -222,6 +228,9 @@ watch(
                                     formatDistanceToNowStrict(loan?.loans[0]?.created_at, { addSuffix: true })
                                 }}</span>
                             </div>
+                        </div>
+                        <div v-if="loanDetails?.length === 0" class="text-center">
+                            <span class="text-gray-400">No wallet found</span>
                         </div>
                     </div>
                 </div>
