@@ -1,0 +1,46 @@
+services:
+  expense-tracker:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: expense-tracker
+    container_name: expense-tracker
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./storage:/var/www/storage
+      - ./bootstrap/cache:/var/www/bootstrap/cache
+      - ./:/var/www
+      - ./docker-compose/nginx/default.conf:/etc/nginx/nginx.conf
+ 
+
+    networks:
+      - expense-tracker
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: 172.17.0.1  
+      DB_PORT: 3306
+      DB_DATABASE: expense_tracker
+      DB_USERNAME: smct
+      DB_PASSWORD: smct 
+
+
+  expense-tracker-nginx:
+    image: nginx:alpine
+    container_name: expense-tracker-nginx
+    restart: unless-stopped
+    ports:
+      - 1006:1006
+    volumes:
+      - ./storage:/var/www/storage
+      - ./bootstrap/cache:/var/www/bootstrap/cache
+      - ./docker-compose/nginx/default.conf:/etc/nginx/nginx.conf
+      - ./:/var/www
+
+    networks:
+      - expense-tracker
+
+
+networks:
+  expense-tracker:
+    driver: bridge
