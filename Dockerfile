@@ -1,3 +1,5 @@
+FROM php:8.3-fpm
+
 # Install Node.js and npm
 RUN apt-get update && apt-get install -y curl gnupg \
   && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
@@ -30,3 +32,5 @@ EXPOSE 9000 5173
 
 # Start the server
 CMD ["sh", "-c", "composer run dev"]
+
+
