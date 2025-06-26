@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
-
+import { HandCoinsIcon } from 'lucide-vue-next';
 </script>
 
 <template>
@@ -11,24 +11,7 @@ import Input from '@/components/ui/input/Input.vue';
             <div class="grid gap-8 md:grid-cols-4">
                 <div>
                     <div class="mb-4 flex items-center space-x-2">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="text-indigo-400"
-                        >
-                            <path d="M12 2v4"></path>
-                            <path d="m16 6-4-4-4 4"></path>
-                            <path d="M18 20a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2"></path>
-                            <path d="m6 16-4-4 4-4"></path>
-                            <path d="m18 8 4-4-4-4"></path>
-                        </svg>
+                        <HandCoinsIcon class="h-8 w-8 text-blue-500" />
                         <span class="text-xl font-bold">E-Track</span>
                     </div>
                     <p class="text-gray-400">Beautiful expense tracking for everyone. Take control of your finances today.</p>
@@ -56,7 +39,7 @@ import Input from '@/components/ui/input/Input.vue';
                     <p class="mb-4 text-gray-400">Get the latest updates and news</p>
                     <div class="flex">
                         <Input placeholder="Your email" class="rounded-r-none border-gray-700 bg-gray-800 text-white" />
-                        <Button class="rounded-l-none bg-indigo-600 hover:bg-indigo-700 text-white">Subscribe</Button>
+                        <Button class="rounded-l-none bg-indigo-600 text-white hover:bg-indigo-700">Subscribe</Button>
                     </div>
                 </div>
             </div>
