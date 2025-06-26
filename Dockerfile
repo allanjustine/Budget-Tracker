@@ -1,29 +1,36 @@
-FROM php:8.3-fpm
+FROM php:8.2-fpm
 
+# Install dependencies
 RUN apt-get update && apt-get install -y \
-git unzip libpng-dev libjpeg-dev libfreetype6-dev libonig-dev libzip-dev zip curl
+    build-essential \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    git \
+    curl \
+    npm
 
-RUN apt-get update && apt-get install -y \
-git unzip curl nodejs npm
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Install Node.js 20 (replace apt's outdated version)
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs
-
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip
-
-WORKDIR /var/www
-
-COPY . .
-
+# Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-RUN npm install
+# Set working directory
+WORKDIR /var/www
 
-RUN npm run build && ls -l public/build
+# Copy app files
+COPY . .
 
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
 
+# Set permissions
+RUN chown -R www-data:www-data /var/www
+
+# Expose port
 EXPOSE 1006
 
 CMD ["php-fpm"]

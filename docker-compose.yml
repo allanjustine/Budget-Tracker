@@ -10,17 +10,17 @@ services:
     volumes:
       - ./:/var/www
       - ./docker-compose/nginx/default.conf:/etc/nginx/conf.d/default.conf
- 
+
 
     networks:
       - expense-tracker
     environment:
       DB_CONNECTION: mysql
-      DB_HOST: 172.17.0.1  
+      DB_HOST: 172.17.0.1
       DB_PORT: 3306
       DB_DATABASE: expense_tracker
       DB_USERNAME: smct
-      DB_PASSWORD: smct 
+      DB_PASSWORD: smct
 
 
   expense-tracker-nginx:
