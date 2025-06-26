@@ -10,16 +10,16 @@ class BankType extends Model
 
     public function wallets()
     {
-        return $this->hasManys(Wallet::class);
+        return $this->hasMany(Wallet::class);
     }
 
     public function loans()
     {
-        return $this->hasManys(Loan::class);
+        return $this->hasMany(Loan::class);
     }
 
     public function expenses()
     {
-        return $this->hasManys(Expense::class);
+        return $this->hasMany(Expense::class);
     }
 }

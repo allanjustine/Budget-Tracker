@@ -7,6 +7,7 @@ const props = defineProps<{
   defaultValue?: string | number
   modelValue?: string | number
   class?: HTMLAttributes['class']
+  type?: string
 }>()
 
 const emits = defineEmits<{
@@ -29,5 +30,6 @@ const modelValue = useVModel(props, 'modelValue', emits, {
       'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
       props.class,
     )"
+    :type="props.type"
   >
 </template>

@@ -1,5 +1,15 @@
 <script setup lang="ts">
 import InputError from '@/components/InputError.vue';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import Button from '@/components/ui/button/Button.vue';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -39,6 +49,10 @@ const modalOpen = ref(false);
 const editModalOpen = ref(false);
 
 const selectedAccountWallet: any = ref(null);
+
+const deleteAlertDialogOpen: any = ref(false);
+
+const selectedToDelete: any = ref(null);
 
 function submit() {
     form.post(route('account-wallets.store'), {
@@ -112,6 +126,11 @@ watch(
         }
     },
 );
+
+const handleAlertDialogOpen = (item: number) => {
+    selectedToDelete.value = item;
+    deleteAlertDialogOpen.value = true;
+}
 </script>
 
 <template>
@@ -189,7 +208,7 @@ watch(
                         <TableCell> {{ format(accountWallet.created_at, 'MMM dd, yyyy hh:mm a') }}</TableCell>
                         <TableCell class="flex gap-2">
                             <Button class="bg-blue-500 text-white hover:bg-blue-600" @click="handleEdit(accountWallet)"><PenBoxIcon /></Button>
-                            <Button @click="deleteAccountWallet(accountWallet.id)" class="bg-red-500 text-white hover:bg-red-600"
+                            <Button @click="handleAlertDialogOpen(accountWallet)" class="bg-red-500 text-white hover:bg-red-600"
                                 ><TrashIcon />
                             </Button>
                         </TableCell>
@@ -257,5 +276,19 @@ watch(
                 </TableBody>
             </Table>
         </div>
+        <AlertDialog v-model:open="deleteAlertDialogOpen">
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure you want to delete amount {{ Number(selectedToDelete?.amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }} with bank type of {{ selectedToDelete?.bank_type?.name }}?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction @click="deleteAccountWallet(selectedToDelete.id)" class="bg-red-500 text-white hover:bg-red-600">Yes, Delete</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     </AppLayout>
 </template>

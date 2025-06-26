@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BankType;
 use App\Models\Expense;
 use App\Models\Loan;
 use App\Models\Wallet;
@@ -11,6 +12,82 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
+
+    private function getWalletChart()
+    {
+        $walletChart = Wallet::where('user_id', Auth::id())
+            ->latest()
+            ->get()
+            ->groupBy(['created_at' => fn($wallet) => $wallet->created_at->format('F')])
+            ->map(fn($wallet) => $wallet->sum('amount'));
+
+        $data = [];
+        $labels = [];
+        $walletChart;
+
+        foreach ($walletChart as $month => $amount) {
+            $labels[] = $month;
+            $data[] = $amount;
+        }
+
+        $walletChart = [
+            'labels' => $labels,
+            'data'   => $data
+        ];
+
+        return $walletChart;
+    }
+
+    private function getLoanChart()
+    {
+        $expenseChart = Expense::where('user_id', Auth::id())
+            ->latest()
+            ->get()
+            ->groupBy(['created_at' => fn($expense) => $expense->created_at->format('F')])
+            ->map(fn($expense) => $expense->sum('amount'));
+
+        $data = [];
+        $labels = [];
+        $expenseChart;
+
+        foreach ($expenseChart as $month => $amount) {
+            $labels[] = $month;
+            $data[] = $amount;
+        }
+
+        $expenseChart = [
+            'labels' => $labels,
+            'data'   => $data
+        ];
+
+        return $expenseChart;
+    }
+
+    private function getExpenseChart()
+    {
+        $loanChart = Loan::where('user_id', Auth::id())
+            ->latest()
+            ->get()
+            ->groupBy(['created_at' => fn($loan) => $loan->created_at->format('F')])
+            ->map(fn($loan) => $loan->sum('amount'));
+
+        $data = [];
+        $labels = [];
+        $loanChart;
+
+        foreach ($loanChart as $month => $amount) {
+            $labels[] = $month;
+            $data[] = $amount;
+        }
+
+        $loanChart = [
+            'labels' => $labels,
+            'data'   => $data
+        ];
+
+        return $loanChart;
+    }
+
     public function index()
     {
         $totalBalance = Wallet::totalBalance();
@@ -27,11 +104,66 @@ class DashboardController extends Controller
 
         $totalGross = $remainingBalance + $totalExpense;
 
-        return Inertia::render('Dashboard', [
-            'grossBalance'  => $totalGross,
-            'totalBalance'  => $remainingBalance,
-            'totalExpense'  => $totalExpense,
-            'totalLoan'     => $remainingLoan,
+        $walletDetails = BankType::with([
+            'wallets' => fn($wallet) => $wallet->where('user_id', Auth::id())->latest()
+        ])
+            ->whereHas('wallets', fn($wallet) => $wallet->where('user_id', Auth::id()))
+            ->withCount([
+                'wallets' => fn($wallet) => $wallet->where('user_id', Auth::id()),
+            ])
+            ->withSum(
+                ['wallets' => fn($wallet) => $wallet->where('user_id', Auth::id()), 'expenses' => fn($wallet) => $wallet->where('user_id', Auth::id())],
+                'amount',
+            )
+            ->get();
+
+        $expenseDetails = BankType::with([
+            'expenses' => fn($expense) => $expense->where('user_id', Auth::id())->latest(),
+            'expenses.expenseCategory',
+            'expenses.loanType',
+            'expenses.loan'
+        ])
+            ->withCount([
+                'expenses' => fn($expense) => $expense->where('user_id', Auth::id())
+            ])
+            ->whereHas('expenses', fn($expense) => $expense->where('user_id', Auth::id()))
+            ->withSum(
+                ['expenses' => fn($expense) => $expense->where('user_id', Auth::id())],
+                'amount'
+            )
+            ->get();
+
+        $loanDetails = BankType::with([
+            'loans' => fn($loan) => $loan->where('user_id', Auth::id())->latest(),
+            'loans.loanType'
+        ])
+            ->whereHas('loans', fn($loan) => $loan->where('user_id', Auth::id()))
+            ->withCount([
+                'loans' => fn($wallet) => $wallet->where('user_id', Auth::id())->latest()
+            ])
+            ->withSum(
+                ['loans' => fn($loan) => $loan->where('user_id', Auth::id())],
+                'amount'
+            )
+            ->get();
+
+        $walletChart = $this->getWalletChart();
+
+        $expenseChart = $this->getExpenseChart();
+
+        $loanChart = $this->getLoanChart();
+
+        return Inertia::render('dashboard/Dashboard', [
+            'grossBalance'      => $totalGross,
+            'totalBalance'      => $remainingBalance,
+            'totalExpense'      => $totalExpense,
+            'totalLoan'         => $remainingLoan,
+            'walletDetails'     => $walletDetails,
+            'expenseDetails'    => $expenseDetails,
+            'loanDetails'       => $loanDetails,
+            'walletChart'       => $walletChart,
+            'expenseChart'      => $expenseChart,
+            'loanChart'         => $loanChart,
         ]);
     }
 }

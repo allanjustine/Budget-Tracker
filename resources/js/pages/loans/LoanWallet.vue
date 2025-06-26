@@ -1,5 +1,15 @@
 <script setup lang="ts">
 import InputError from '@/components/InputError.vue';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import Button from '@/components/ui/button/Button.vue';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -41,6 +51,10 @@ const modalOpen = ref(false);
 const editModalOpen = ref(false);
 
 const selectedLoanWallet: any = ref(null);
+
+const deleteAlertDialogOpen: any = ref(false);
+
+const selectedToDelete: any = ref(null);
 
 function submit() {
     form.post(route('loans.store'), {
@@ -119,6 +133,11 @@ function resetIfOthers(fieldItem: string, fieldOthers: string) {
 }
 
 resetIfOthers('bank_type_id', 'bank_type_others');
+
+const handleAlertDialogOpen = (item: number) => {
+    selectedToDelete.value = item;
+    deleteAlertDialogOpen.value = true;
+};
 </script>
 
 <template>
@@ -211,7 +230,7 @@ resetIfOthers('bank_type_id', 'bank_type_others');
                         <TableCell> {{ format(loanWallet.created_at, 'MMM dd, yyyy hh:mm a') }}</TableCell>
                         <TableCell class="flex gap-2">
                             <Button class="bg-blue-500 text-white hover:bg-blue-600" @click="handleEdit(loanWallet)"><PenBoxIcon /></Button>
-                            <Button @click="deleteLoanWallet(loanWallet.id)" class="bg-red-500 text-white hover:bg-red-600"><TrashIcon /> </Button>
+                            <Button @click="handleAlertDialogOpen(loanWallet)" class="bg-red-500 text-white hover:bg-red-600"><TrashIcon /> </Button>
                         </TableCell>
                     </TableRow>
                     <TableRow v-if="loanWallets?.length === 0">
@@ -291,5 +310,26 @@ resetIfOthers('bank_type_id', 'bank_type_others');
                 </TableBody>
             </Table>
         </div>
+
+        <AlertDialog v-model:open="deleteAlertDialogOpen">
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle
+                        >Are you absolutely sure you want to delete this loan <span class="uppercase">{{ selectedToDelete?.loan_type?.name }}</span> with the amount of
+                        {{ Number(selectedToDelete?.amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }} with bank type of
+                        {{ selectedToDelete?.bank_type?.name }}?</AlertDialogTitle
+                    >
+                    <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction @click="deleteLoanWallet(selectedToDelete.id)" class="bg-red-500 text-white hover:bg-red-600"
+                        >Yes, Delete</AlertDialogAction
+                    >
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     </AppLayout>
 </template>
