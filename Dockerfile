@@ -1,54 +1,31 @@
-# Stage 1: Build frontend assets
-FROM node:20-alpine as node-builder
+# Use official PHP 8.2 FPM image
+FROM php:8.3-fpm
 
-WORKDIR /app
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git unzip libpng-dev libjpeg-dev libfreetype6-dev libonig-dev libzip-dev zip curl \
+    nodejs npm
 
-COPY package*.json ./
-RUN npm install
-
-COPY . .
-RUN npm run build
-
-# Stage 2: PHP with Laravel setup
-FROM php:8.3-fpm-alpine
-
-# Install system dependencies
-RUN apk --no-cache add \
-    zlib-dev \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    libwebp-dev \
-    freetype-dev \
-    icu-dev \
-    oniguruma-dev \
-    libxml2-dev \
-    zip \
-    unzip \
-    git \
-    curl \
-    bash \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install gd pdo pdo_mysql intl mbstring xml
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Set working directory
 WORKDIR /var/www
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Copy Laravel project files
+# Copy application source
 COPY . .
 
-# Copy built frontend assets from node-builder
-COPY --from=node-builder /app/public /var/www/public
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Install Node.js dependencies
+RUN npm install
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 775 storage bootstrap/cache
+# Fix permissions (Laravel)
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-EXPOSE 1006
+# Expose Laravel FPM and Vite ports
+EXPOSE 9000 5173
 
-CMD ["php-fpm"]
+# Run PHP-FPM and Vite dev server in the same container
+CMD ["sh", "-c", "php-fpm & npm run dev"]
