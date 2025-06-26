@@ -1,34 +1,27 @@
-# Use official PHP 8.3 FPM image
 FROM php:8.3-fpm
 
-# Install dependencies
 RUN apt-get update && apt-get install -y \
-    git unzip libpng-dev libjpeg-dev libfreetype6-dev libonig-dev libzip-dev zip curl \
-    nodejs npm
+git unzip libpng-dev libjpeg-dev libfreetype6-dev libonig-dev libzip-dev zip curl
 
-# Install PHP extensions
+RUN apt-get update && apt-get install -y \
+git unzip curl nodejs npm
+
+# Install Node.js 20 (replace apt's outdated version)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs
+
 RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip
 
-# Set working directory
-WORKDIR /var/www
+WORKDIR /var/www/html
 
-# Copy application source
 COPY . .
 
-# Set PATH to include local node_modules/.bin
-ENV PATH="/var/www/node_modules/.bin:$PATH"
-
-# Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Install Node.js dependencies
-RUN npm install
+RUN npm install && npm run build
 
-# Fix permissions (Laravel)
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Expose ports
 EXPOSE 1006
 
-# Run PHP-FPM and Vite dev server
-CMD ["sh", "-c", "php-fpm & npm run dev"]
+CMD ["php-fpm"]
