@@ -14,13 +14,7 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
-Route::middleware(['auth', 'verified'])->group(fn() => [
-    Route::resource('bank-types', BankTypeController::class),
-
-    Route::resource('loan-types', LoanTypeController::class),
-
-    Route::resource('expense-categories', ExpenseCategoryController::class),
-
+Route::middleware(['auth', 'verified', 'role:user'])->group(fn() => [
     Route::resource('account-wallets', AccountWalletController::class),
 
     Route::resource('loans', LoanWalletController::class),
@@ -30,6 +24,15 @@ Route::middleware(['auth', 'verified'])->group(fn() => [
     Route::controller(DashboardController::class)->group(fn() => [
         Route::get('dashboard', 'index')->name('dashboard'),
     ]),
+
+]);
+
+Route::middleware(['auth', 'verified', 'role:admin'])->group(fn() => [
+    Route::resource('bank-types', BankTypeController::class),
+
+    Route::resource('loan-types', LoanTypeController::class),
+
+    Route::resource('expense-categories', ExpenseCategoryController::class),
 
 ]);
 
