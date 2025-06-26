@@ -194,7 +194,7 @@ watch(
                             </div>
                         </div>
                         <div v-if="expenseDetails?.length === 0" class="text-center">
-                            <span class="text-gray-400">No wallet found</span>
+                            <span class="text-gray-400">No expense found</span>
                         </div>
                     </div>
                     <div class="h-fit rounded-lg border p-2">
@@ -230,7 +230,7 @@ watch(
                             </div>
                         </div>
                         <div v-if="loanDetails?.length === 0" class="text-center">
-                            <span class="text-gray-400">No wallet found</span>
+                            <span class="text-gray-400">No loan found</span>
                         </div>
                     </div>
                 </div>
