@@ -18,7 +18,9 @@ COPY . .
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-RUN npm install && npm run build
+RUN npm install
+
+RUN npm run build && ls -l public/build
 
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
