@@ -38,7 +38,7 @@ class DashboardController extends Controller
         return $walletChart;
     }
 
-    private function getLoanChart()
+    private function getExpenseChart()
     {
         $expenseChart = Expense::where('user_id', Auth::id())
             ->latest()
@@ -63,7 +63,7 @@ class DashboardController extends Controller
         return $expenseChart;
     }
 
-    private function getExpenseChart()
+    private function getLoanChart()
     {
         $loanChart = Loan::where('user_id', Auth::id())
             ->latest()

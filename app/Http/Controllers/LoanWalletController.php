@@ -90,7 +90,7 @@ class LoanWalletController extends Controller
             'amount'                            => $request->amount
         ]);
 
-        $item = Str::upper($loan->loanType->name);
+        $item = Str::upper($loan->loanType?->name?->value);
 
         return to_route('loans.index')->with('success', "Your loan {$item} with the amount of {$loan->amount} using {$loan->bankType->name} added successfully");
     }
