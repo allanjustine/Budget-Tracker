@@ -11,6 +11,7 @@ services:
       - 1006:1006
     volumes:
       - ./:/var/www
+      - ./docker-compose/nginx/default.conf:/etc/nginx/nginx.conf
  
 
     networks:
@@ -24,20 +25,18 @@ services:
       DB_PASSWORD: smct 
 
 
-  # expense-tracker-nginx:
-  #   image: nginx:alpine
-  #   container_name: expense-tracker-nginx
-  #   restart: unless-stopped
-  #   ports:
-  #     - 1006:1006
-  #   volumes:
-  #     - ./storage:/var/www/storage
-  #     - ./bootstrap/cache:/var/www/bootstrap/cache
-  #     - ./docker-compose/nginx/default.conf:/etc/nginx/nginx.conf
-  #     - ./:/var/www
+  expense-tracker-nginx:
+    image: nginx:alpine
+    container_name: expense-tracker-nginx
+    restart: unless-stopped
+    ports:
+      - 1006:1006
+    volumes:
+      - ./docker-compose/nginx/default.conf:/etc/nginx/nginx.conf
+      - ./:/var/www
 
-  #   networks:
-  #     - expense-tracker
+    networks:
+      - expense-tracker
 
 
 networks:
