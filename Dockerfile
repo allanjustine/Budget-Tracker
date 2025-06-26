@@ -1,36 +1,31 @@
+# Use official PHP 8.2 FPM image
 FROM php:8.3-fpm
 
-# Install Node.js and npm
-RUN apt-get update && apt-get install -y curl gnupg \
-  && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-  && apt-get install -y nodejs
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git unzip libpng-dev libjpeg-dev libfreetype6-dev libonig-dev libzip-dev zip curl \
+    nodejs npm
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Set working directory
 WORKDIR /var/www
 
-# Copy package files first to leverage Docker cache
-COPY package*.json ./
-
-# Install Node.js dependencies (including Vite)
-RUN npm install
-
-# Copy rest of application
+# Copy application source
 COPY . .
 
-# Install PHP dependencies
+# Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-RUN composer install
 
-# Build assets
-RUN npm run build
+# Install Node.js dependencies
+RUN npm install
 
-# Fix permissions
+# Fix permissions (Laravel)
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Expose ports
-EXPOSE 1006
+# Expose Laravel FPM and Vite ports
+EXPOSE 9000 5173
 
-# Start the server
-CMD ["sh", "-c", "composer run dev"]
-
-
+# Run PHP-FPM and Vite dev server in the same container
+CMD ["sh", "-c", "php-fpm & npm run dev"]
