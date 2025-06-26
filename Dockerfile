@@ -28,7 +28,7 @@ RUN npm run build
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 # Expose ports
-EXPOSE 9000 5173
+EXPOSE 1006
 
 # Start the server
 CMD ["sh", "-c", "composer run dev"]
