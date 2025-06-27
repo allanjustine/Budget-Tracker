@@ -19,6 +19,11 @@ class Expense extends Model
         return $this->belongsTo(ExpenseCategory::class);
     }
 
+    public function expenseDetail()
+    {
+        return $this->belongsTo(ExpenseDetail::class);
+    }
+
     public function bankType()
     {
         return $this->belongsTo(BankType::class);

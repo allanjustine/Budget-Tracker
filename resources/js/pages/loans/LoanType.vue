@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import InputError from '@/components/InputError.vue';
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import Button from '@/components/ui/button/Button.vue';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -36,6 +45,10 @@ const editModalOpen = ref(false);
 
 const selectedLoan: any = ref(null);
 
+const deleteAlertDialogOpen: any = ref(false);
+
+const selectedToDelete: any = ref(null);
+
 function submit() {
     form.post(route('loan-types.store'), {
         onSuccess: (page) => {
@@ -63,6 +76,8 @@ const deleteLoanType = (id: number) => {
                 duration: 3000,
                 position: 'bottom-center',
             });
+
+            deleteAlertDialogOpen.value = false;
         },
     });
 };
@@ -95,6 +110,11 @@ const handleOpenModal = () => {
     form.reset();
     form.errors = {};
     modalOpen.value = true;
+};
+
+const handleAlertDialogOpen = (item: number) => {
+    selectedToDelete.value = item;
+    deleteAlertDialogOpen.value = true;
 };
 </script>
 
@@ -146,7 +166,7 @@ const handleOpenModal = () => {
                         <TableCell> {{ format(loanType.created_at, 'MMM dd, yyyy hh:mm a') }}</TableCell>
                         <TableCell class="flex gap-2">
                             <Button class="bg-blue-500 text-white hover:bg-blue-600" @click="handleEdit(loanType)"><PenBoxIcon /></Button>
-                            <Button @click="deleteLoanType(loanType.id)" class="bg-red-500 text-white hover:bg-red-600"><TrashIcon /> </Button>
+                            <Button @click="handleAlertDialogOpen(loanType)" class="bg-red-500 text-white hover:bg-red-600"><TrashIcon /> </Button>
                         </TableCell>
                     </TableRow>
                     <TableRow v-if="loanTypes?.length === 0">
@@ -183,5 +203,27 @@ const handleOpenModal = () => {
                 </TableBody>
             </Table>
         </div>
+
+        <AlertDialog v-model:open="deleteAlertDialogOpen">
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure you want to delete this {{ selectedToDelete?.name }} loan type?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        This action cannot be undone. This will permanently remove your data from our servers.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <Button
+                        @click="deleteLoanType(selectedToDelete.id)"
+                        type="button"
+                        :disabled="form.processing"
+                        class="bg-red-500 text-white hover:bg-red-600"
+                        ><span v-if="form.processing" class="flex items-center gap-1"><LoaderCircle class="animate-spin" /> Deleting...</span>
+                        <span v-else>Yes, Delete</span>
+                    </Button>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     </AppLayout>
 </template>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BankType;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
+use App\Models\ExpenseDetail;
 use App\Models\Loan;
 use App\Models\LoanType;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        $expenseWallets = Expense::with('bankType', 'expenseCategory', 'loanType', 'loan.bankType')
+        $expenseWallets = Expense::with('bankType', 'expenseCategory', 'loanType', 'loan.bankType', 'expenseDetail')
             ->where('user_id', Auth::id())
             ->latest()
             ->get();
@@ -38,12 +39,16 @@ class ExpenseController extends Controller
             ->latest()
             ->get();
 
+        $expenseDetails = ExpenseDetail::where('user_id', Auth::id())
+            ->get();
+
         return Inertia::render('expenses/ExpenseWallet', [
             'expenseWallets'        => $expenseWallets,
             'bankTypes'             => $bankTypes,
             'expenseCategories'     => $expenseCategories,
             'loanTypes'             => $loanTypes,
-            'loans'                 => $loans
+            'loans'                 => $loans,
+            'expenseDetails'        => $expenseDetails,
         ]);
     }
 
@@ -98,12 +103,25 @@ class ExpenseController extends Controller
             $expenseCategoryId = $request->expense_category_id;
         }
 
+        if ($request->expense_detail_id === 'others') {
+            $rules['expense_detail_others'] = ['required'];
+            $messages['expense_detail_others.required'] = 'Please specify the other expense detail.';
+            $expensedetail = ExpenseDetail::firstOrCreate(['user_id' => Auth::id(), 'name' => $request->expense_detail_others]);
+            $expenseDetailId = $expensedetail->id;
+        } else {
+            $rules['expense_detail_id'] = ['required', 'exists:expense_categories,id'];
+            $messages['expense_detail_id.required'] = 'Expense detail is required';
+            $messages['expense_detail_id.exists'] = 'Selected expense detail does not exist';
+            $expenseDetailId = $request->expense_detail_id;
+        }
+
         $request->validate($rules, $messages);
 
         $wallet = Expense::create([
             'user_id'                                  => Auth::id(),
             'bank_type_id'                             => $bankTypeId,
             'expense_category_id'                      => $expenseCategoryId,
+            'expense_detail_id'                        => $expenseDetailId,
             'loan_type_id'                             => $request->loan_type_id,
             'loan_id'                                  => $request->loan_id,
             'amount'                                   => $request->amount
@@ -173,11 +191,24 @@ class ExpenseController extends Controller
             $expenseCategoryId = $request->expense_category_id;
         }
 
+        if ($request->expense_detail_id === 'others') {
+            $rules['expense_detail_others'] = ['required'];
+            $messages['expense_detail_others.required'] = 'Please specify the other expense detail.';
+            $expensedetail = ExpenseDetail::firstOrCreate(['user_id' => Auth::id(), 'name' => $request->expense_detail_others]);
+            $expenseDetailId = $expensedetail->id;
+        } else {
+            $rules['expense_detail_id'] = ['required', 'exists:expense_categories,id'];
+            $messages['expense_detail_id.required'] = 'Expense detail is required';
+            $messages['expense_detail_id.exists'] = 'Selected expense detail does not exist';
+            $expenseDetailId = $request->expense_detail_id;
+        }
+
         $request->validate($rules, $messages);
 
         $wallet->update([
             'bank_type_id'                             => $bankTypeId,
             'expense_category_id'                      => $expenseCategoryId,
+            'expense_detail_id'                        => $expenseDetailId,
             'loan_type_id'                             => Str::lower($request->expense_category_others) === 'loans' ? $request->loan_type_id : null,
             'loan_id'                                  => Str::lower($request->expense_category_others) === 'loans' ? $request->loan_id : null,
             'amount'                                   => $request->amount

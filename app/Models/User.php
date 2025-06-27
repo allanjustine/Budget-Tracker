@@ -68,6 +68,11 @@ class User extends Authenticatable
         return $this->hasMany(Wallet::class);
     }
 
+    public function expenseDetails()
+    {
+        return $this->hasMany(ExpenseDetail::class);
+    }
+
     public function isAdmin()
     {
         return $this->hasRole(RoleName::ADMIN);

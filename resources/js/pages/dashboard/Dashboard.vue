@@ -115,8 +115,8 @@ watch(
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all"> All </SelectItem>
-                                <SelectItem value="card"> Card </SelectItem>
-                                <SelectItem value="chart"> Chart </SelectItem>
+                                <SelectItem value="card"> Card Only </SelectItem>
+                                <SelectItem value="chart"> Chart Only </SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -246,7 +246,7 @@ watch(
                                 </h2>
                                 <div class="flex items-center gap-1 rounded-lg border p-2">
                                     <Label
-                                        v-for="(option, index) in ['wallet', 'loan', 'expense']"
+                                        v-for="(option, index) in ['wallet', 'expense', 'loan']"
                                         class="flex cursor-pointer items-center gap-2 rounded px-4 py-2 transition-colors duration-300 ease-in-out hover:bg-gray-500/20"
                                         :class="{ 'bg-gray-500/20': chartType === option }"
                                         :key="index"

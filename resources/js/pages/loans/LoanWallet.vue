@@ -2,7 +2,6 @@
 import InputError from '@/components/InputError.vue';
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
@@ -84,6 +83,8 @@ const deleteLoanWallet = (id: number) => {
                 duration: 3000,
                 position: 'bottom-center',
             });
+
+            deleteAlertDialogOpen.value = false;
         },
     });
 };
@@ -315,18 +316,24 @@ const handleAlertDialogOpen = (item: number) => {
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle
-                        >Are you absolutely sure you want to delete this loan <span class="uppercase">{{ selectedToDelete?.loan_type?.name }}</span> with the amount of
+                        >Are you absolutely sure you want to delete this loan
+                        <span class="uppercase">{{ selectedToDelete?.loan_type?.name }}</span> with the amount of
                         {{ Number(selectedToDelete?.amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }} with bank type of
                         {{ selectedToDelete?.bank_type?.name }}?</AlertDialogTitle
                     >
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+                        This action cannot be undone. This will permanently remove your data from our servers.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction @click="deleteLoanWallet(selectedToDelete.id)" class="bg-red-500 text-white hover:bg-red-600"
-                        >Yes, Delete</AlertDialogAction
+                    <Button
+                        @click="deleteLoanWallet(selectedToDelete.id)"
+                        type="button"
+                        :disabled="form.processing"
+                        class="bg-red-500 text-white hover:bg-red-600"
+                        ><span v-if="form.processing" class="flex items-center gap-1"><LoaderCircle class="animate-spin" /> Deleting...</span>
+                        <span v-else>Yes, Delete</span></Button
                     >
                 </AlertDialogFooter>
             </AlertDialogContent>

@@ -5,6 +5,7 @@ use App\Http\Controllers\BankTypeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ExpenseDetailController;
 use App\Http\Controllers\LoanTypeController;
 use App\Http\Controllers\LoanWalletController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,8 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(fn() => [
     Route::resource('loans', LoanWalletController::class),
 
     Route::resource('expenses', ExpenseController::class),
+
+    Route::resource('expense-details', ExpenseDetailController::class),
 
     Route::controller(DashboardController::class)->group(fn() => [
         Route::get('dashboard', 'index')->name('dashboard'),

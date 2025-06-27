@@ -2,7 +2,6 @@
 import InputError from '@/components/InputError.vue';
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
@@ -37,16 +36,19 @@ const props = defineProps({
     expenseCategories: Object,
     loans: Object,
     loanTypes: Object,
+    expenseDetails: Object,
 });
 
-const tableHeads = ['ID', 'Amount', 'Bank Type', 'Expense Category', 'Created At', 'Action'];
+const tableHeads = ['ID', 'Amount', 'Bank Type', 'Expense Category', 'Expense Detail', 'Created At', 'Action'];
 
 const form = useForm({
     amount: 0,
     bank_type_id: '',
     bank_type_others: '',
     expense_category_id: '',
+    expense_detail_id: '',
     expense_category_others: '',
+    expense_detail_others: '',
     loan_id: '',
     loan_type_id: '',
 });
@@ -89,6 +91,8 @@ const deleteExpenseWallet = (id: number) => {
                 duration: 3000,
                 position: 'bottom-center',
             });
+
+            deleteAlertDialogOpen.value = false;
         },
     });
 };
@@ -96,6 +100,7 @@ const handleEdit = (expenseWallet: any) => {
     form.amount = expenseWallet.amount;
     form.bank_type_id = expenseWallet.bank_type_id;
     form.expense_category_id = expenseWallet.expense_category_id;
+    form.expense_detail_id = expenseWallet.expense_detail_id;
     form.loan_id = expenseWallet.loan_id;
     form.loan_type_id = expenseWallet.loan_type_id;
     selectedExpenseWallet.value = expenseWallet;
@@ -141,6 +146,7 @@ function resetIfOthers(fieldItem: string, fieldOthers: string) {
 
 resetIfOthers('bank_type_id', 'bank_type_others');
 resetIfOthers('expense_category_id', 'expense_category_others');
+resetIfOthers('expense_detail_id', 'expense_detail_others');
 
 watch(
     () => form.expense_category_id,
@@ -189,7 +195,7 @@ const handleAlertDialogOpen = (item: number) => {
                                         <SelectItem v-for="(expenseCategory, index) in expenseCategories" :key="index" :value="expenseCategory.id">
                                             {{ expenseCategory.name }}
                                         </SelectItem>
-                                        <SelectItem value="others"> Others </SelectItem>
+                                        <!-- <SelectItem value="others"> Others </SelectItem> -->
                                     </SelectContent>
                                 </Select>
                                 <InputError :message="form.errors.expense_category_id" />
@@ -218,6 +224,32 @@ const handleAlertDialogOpen = (item: number) => {
                                     </SelectContent>
                                 </Select>
                                 <InputError :message="form.errors.loan_type_id" />
+                            </div>
+                            <div class="space-y-2">
+                                <Label for="expense_detail" class="text-right"> Expense Detail </Label>
+                                <Select v-model="form.expense_detail_id">
+                                    <SelectTrigger class="w-full">
+                                        <SelectValue placeholder="Select expense detail" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem v-for="(expenseDetail, index) in expenseDetails" :key="index" :value="expenseDetail.id">
+                                            {{ expenseDetail.name }}
+                                        </SelectItem>
+                                        <SelectItem value="others"> Others </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <InputError :message="form.errors.expense_detail_id" />
+                            </div>
+                            <div class="space-y-2" v-if="form.expense_detail_id === 'others'">
+                                <Label for="bank_type" class="text-right"> Expense Detail Others </Label>
+                                <Input
+                                    type="text"
+                                    id="expense_detail_others"
+                                    :class="form.errors.expense_detail_others && 'border-red-500'"
+                                    placeholder="Enter Expense Detail Others"
+                                    v-model="form.expense_detail_others"
+                                />
+                                <InputError :message="form.errors.expense_detail_others" />
                             </div>
                             <div class="space-y-2" v-if="form.expense_category_others.toLowerCase() === 'loans'">
                                 <Label for="loan_id" class="text-right"> Loan Availed </Label>
@@ -294,6 +326,9 @@ const handleAlertDialogOpen = (item: number) => {
                             <p class="text-gray-500 capitalize">{{ expenseWallet?.loan_type?.name }}</p>
                             <p class="text-gray-500">{{ expenseWallet?.loan?.bank_type?.name }}</p>
                         </TableCell>
+                        <TableCell>
+                            {{ expenseWallet?.expense_detail?.name }}
+                        </TableCell>
                         <TableCell> {{ format(expenseWallet.created_at, 'MMM dd, yyyy hh:mm a') }}</TableCell>
                         <TableCell class="flex gap-2">
                             <Button class="bg-blue-500 text-white hover:bg-blue-600" @click="handleEdit(expenseWallet)"><PenBoxIcon /></Button>
@@ -339,7 +374,7 @@ const handleAlertDialogOpen = (item: number) => {
                                             >
                                                 {{ expenseCategory.name }}
                                             </SelectItem>
-                                            <SelectItem value="others"> Others </SelectItem>
+                                            <!-- <SelectItem value="others"> Others </SelectItem> -->
                                         </SelectContent>
                                     </Select>
                                     <InputError :message="form.errors.expense_category_id" />
@@ -354,6 +389,32 @@ const handleAlertDialogOpen = (item: number) => {
                                         v-model="form.expense_category_others"
                                     />
                                     <InputError :message="form.errors.expense_category_others" />
+                                </div>
+                                <div class="space-y-2">
+                                    <Label for="expense_detail" class="text-right"> Expense Detail </Label>
+                                    <Select v-model="form.expense_detail_id">
+                                        <SelectTrigger class="w-full">
+                                            <SelectValue placeholder="Select expense detail" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem v-for="(expenseDetail, index) in expenseDetails" :key="index" :value="expenseDetail.id">
+                                                {{ expenseDetail.name }}
+                                            </SelectItem>
+                                            <SelectItem value="others"> Others </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <InputError :message="form.errors.expense_detail_id" />
+                                </div>
+                                <div class="space-y-2" v-if="form.expense_detail_id === 'others'">
+                                    <Label for="bank_type" class="text-right"> Expense Detail Others </Label>
+                                    <Input
+                                        type="text"
+                                        id="expense_detail_others"
+                                        :class="form.errors.expense_detail_others && 'border-red-500'"
+                                        placeholder="Enter Expense Detail Others"
+                                        v-model="form.expense_detail_others"
+                                    />
+                                    <InputError :message="form.errors.expense_detail_others" />
                                 </div>
                                 <div class="space-y-2" v-if="form.expense_category_others.toLowerCase() === 'loans'">
                                     <Label for="loan_type_id" class="text-right"> Loan Type </Label>
@@ -441,13 +502,18 @@ const handleAlertDialogOpen = (item: number) => {
                         >?</AlertDialogTitle
                     >
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+                        This action cannot be undone. This will permanently remove your data from our servers.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction @click="deleteExpenseWallet(selectedToDelete.id)" class="bg-red-500 text-white hover:bg-red-600"
-                        >Yes, Delete</AlertDialogAction
+                    <Button
+                        @click="deleteExpenseWallet(selectedToDelete.id)"
+                        type="button"
+                        :disabled="form.processing"
+                        class="bg-red-500 text-white hover:bg-red-600"
+                        ><span v-if="form.processing" class="flex items-center gap-1"><LoaderCircle class="animate-spin" /> Deleting...</span>
+                        <span v-else>Yes, Delete</span></Button
                     >
                 </AlertDialogFooter>
             </AlertDialogContent>

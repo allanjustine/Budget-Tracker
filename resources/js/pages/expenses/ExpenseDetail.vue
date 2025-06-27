@@ -24,13 +24,13 @@ import { toast } from 'vue-sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Bank types',
-        href: '/bank-types',
+        title: 'Expense details',
+        href: '/expense-details',
     },
 ];
 
-const { bankTypes } = defineProps({
-    bankTypes: Object,
+const { expenseDetails } = defineProps({
+    expenseDetails: Object,
 });
 
 const tableHeads = ['ID', 'Name', 'Created At', 'Action'];
@@ -43,21 +43,20 @@ const modalOpen = ref(false);
 
 const editModalOpen = ref(false);
 
-const selectedBank: any = ref(null);
+const selectedExpense: any = ref(null);
 
 const deleteAlertDialogOpen: any = ref(false);
 
 const selectedToDelete: any = ref(null);
 
 function submit() {
-    form.post(route('bank-types.store'), {
+    form.post(route('expense-details.store'), {
         onSuccess: (page) => {
             const { success, error }: any = page.props.flash;
 
             toast('Created!', {
                 description: success,
                 duration: 3000,
-                position: 'bottom-center',
             });
 
             form.reset();
@@ -67,8 +66,8 @@ function submit() {
     });
 }
 
-const deleteBankType = (id: number) => {
-    form.delete(route('bank-types.destroy', id), {
+const deleteExpenseDetail = (id: number) => {
+    form.delete(route('expense-details.destroy', id), {
         onSuccess: (page) => {
             const { success, error }: any = page.props.flash;
 
@@ -82,15 +81,15 @@ const deleteBankType = (id: number) => {
         },
     });
 };
-const handleEdit = (bankType: any) => {
-    form.name = bankType.name;
-    selectedBank.value = bankType;
+const handleEdit = (expenseDetail: any) => {
+    form.name = expenseDetail.name;
+    selectedExpense.value = expenseDetail;
     form.errors = {};
     editModalOpen.value = true;
 };
 
 const handleUpdate = () => {
-    form.patch(route('bank-types.update', selectedBank.value.id), {
+    form.patch(route('expense-details.update', selectedExpense.value.id), {
         onSuccess: (page) => {
             const { success, error }: any = page.props.flash;
 
@@ -120,23 +119,23 @@ const handleAlertDialogOpen = (item: number) => {
 </script>
 
 <template>
-    <Head title="Bank types" />
+    <Head title="Expense details" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="p-5">
             <div class="w-full">
                 <Dialog v-model:open="modalOpen">
-                    <Button class="float-end bg-blue-500 text-white hover:bg-blue-600" @click="handleOpenModal"><Plus /> Add Bank Types</Button>
+                    <Button class="float-end bg-blue-500 text-white hover:bg-blue-600" @click="handleOpenModal"><Plus /> Add Expense Details</Button>
                     <DialogContent class="sm:max-w-[425px]">
                         <DialogHeader>
-                            <DialogTitle>Add Bank Type</DialogTitle>
+                            <DialogTitle>Add Expense Detail</DialogTitle>
                         </DialogHeader>
                         <form @submit.prevent="submit">
                             <div class="grid gap-2 py-4">
-                                <Label for="bank_name" class="text-right"> Bank Name </Label>
+                                <Label for="expense_name" class="text-right"> Expense Name </Label>
                                 <Input
-                                    id="bank_name"
+                                    id="expense_name"
                                     :class="form.errors.name && 'border-red-500'"
-                                    placeholder="Enter Bank Name"
+                                    placeholder="Enter Expense Name"
                                     class="col-span-3"
                                     v-model="form.name"
                                 />
@@ -161,30 +160,32 @@ const handleAlertDialogOpen = (item: number) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow v-for="(bankType, index) in bankTypes" :key="index">
-                        <TableCell> {{ bankType.id }}</TableCell>
-                        <TableCell> {{ bankType.name }}</TableCell>
-                        <TableCell> {{ format(bankType.created_at, 'MMM dd, yyyy hh:mm a') }}</TableCell>
+                    <TableRow v-for="(expenseDetail, index) in expenseDetails" :key="index">
+                        <TableCell> {{ expenseDetail.id }}</TableCell>
+                        <TableCell> {{ expenseDetail.name }}</TableCell>
+                        <TableCell> {{ format(expenseDetail.created_at, 'MMM dd, yyyy hh:mm a') }}</TableCell>
                         <TableCell class="flex gap-2">
-                            <Button class="bg-blue-500 text-white hover:bg-blue-600" @click="handleEdit(bankType)"><PenBoxIcon /></Button>
-                            <Button @click="handleAlertDialogOpen(bankType)" class="bg-red-500 text-white hover:bg-red-600"><TrashIcon /> </Button>
+                            <Button class="bg-blue-500 text-white hover:bg-blue-600" @click="handleEdit(expenseDetail)"><PenBoxIcon /></Button>
+                            <Button @click="handleAlertDialogOpen(expenseDetail)" class="bg-red-500 text-white hover:bg-red-600"
+                                ><TrashIcon />
+                            </Button>
                         </TableCell>
                     </TableRow>
-                    <TableRow v-if="bankTypes?.length === 0">
-                        <TableCell colspan="4" class="text-center">No bank types found.</TableCell>
+                    <TableRow v-if="expenseDetails?.length === 0">
+                        <TableCell colspan="4" class="text-center">No expense details found.</TableCell>
                     </TableRow>
                     <Dialog v-model:open="editModalOpen">
                         <DialogContent class="sm:max-w-[425px]">
                             <DialogHeader>
-                                <DialogTitle>Editing {{ selectedBank.name }}...</DialogTitle>
+                                <DialogTitle>Editing {{ selectedExpense.name }}...</DialogTitle>
                             </DialogHeader>
                             <form @submit.prevent="handleUpdate">
                                 <div class="grid gap-2 py-4">
-                                    <Label for="bank_name" class="text-right"> Bank Name </Label>
+                                    <Label for="expense_name" class="text-right"> Expense Name </Label>
                                     <Input
-                                        id="bank_name"
+                                        id="expense_name"
                                         :class="form.errors.name && 'border-red-500'"
-                                        placeholder="Enter Bank Name"
+                                        placeholder="Enter Expense Name"
                                         class="col-span-3"
                                         v-model="form.name"
                                     />
@@ -204,10 +205,11 @@ const handleAlertDialogOpen = (item: number) => {
                 </TableBody>
             </Table>
         </div>
+
         <AlertDialog v-model:open="deleteAlertDialogOpen">
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure you want to delete this {{ selectedToDelete?.name }} bank type?</AlertDialogTitle>
+                    <AlertDialogTitle>Are you absolutely sure you want to delete this {{ selectedToDelete?.name }} expense detail?</AlertDialogTitle>
                     <AlertDialogDescription>
                         This action cannot be undone. This will permanently remove your data from our servers.
                     </AlertDialogDescription>
@@ -215,13 +217,13 @@ const handleAlertDialogOpen = (item: number) => {
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <Button
-                        @click="deleteBankType(selectedToDelete.id)"
+                        @click="deleteExpenseDetail(selectedToDelete.id)"
                         type="button"
                         :disabled="form.processing"
                         class="bg-red-500 text-white hover:bg-red-600"
                         ><span v-if="form.processing" class="flex items-center gap-1"><LoaderCircle class="animate-spin" /> Deleting...</span>
-                        <span v-else>Yes, Delete</span></Button
-                    >
+                        <span v-else>Yes, Delete</span>
+                    </Button>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

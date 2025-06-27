@@ -2,7 +2,6 @@
 import InputError from '@/components/InputError.vue';
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
@@ -82,6 +81,8 @@ const deleteAccountWallet = (id: number) => {
                 duration: 3000,
                 position: 'bottom-center',
             });
+
+            deleteAlertDialogOpen.value = false;
         },
     });
 };
@@ -130,7 +131,7 @@ watch(
 const handleAlertDialogOpen = (item: number) => {
     selectedToDelete.value = item;
     deleteAlertDialogOpen.value = true;
-}
+};
 </script>
 
 <template>
@@ -279,14 +280,25 @@ const handleAlertDialogOpen = (item: number) => {
         <AlertDialog v-model:open="deleteAlertDialogOpen">
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure you want to delete amount {{ Number(selectedToDelete?.amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }} with bank type of {{ selectedToDelete?.bank_type?.name }}?</AlertDialogTitle>
+                    <AlertDialogTitle
+                        >Are you absolutely sure you want to delete amount
+                        {{ Number(selectedToDelete?.amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }} with bank type of
+                        {{ selectedToDelete?.bank_type?.name }}?</AlertDialogTitle
+                    >
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+                        This action cannot be undone. This will permanently remove your data from our servers.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction @click="deleteAccountWallet(selectedToDelete.id)" class="bg-red-500 text-white hover:bg-red-600">Yes, Delete</AlertDialogAction>
+                    <Button
+                        @click="deleteAccountWallet(selectedToDelete.id)"
+                        type="button"
+                        :disabled="form.processing"
+                        class="bg-red-500 text-white hover:bg-red-600"
+                        ><span v-if="form.processing" class="flex items-center gap-1"><LoaderCircle class="animate-spin" /> Deleting...</span>
+                        <span v-else>Yes, Delete</span></Button
+                    >
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
