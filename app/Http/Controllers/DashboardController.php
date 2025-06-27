@@ -121,7 +121,8 @@ class DashboardController extends Controller
             'expenses' => fn($expense) => $expense->where('user_id', Auth::id())->latest(),
             'expenses.expenseCategory',
             'expenses.loanType',
-            'expenses.loan'
+            'expenses.loan',
+            'expenses.expenseDetail'
         ])
             ->withCount([
                 'expenses' => fn($expense) => $expense->where('user_id', Auth::id())

@@ -305,6 +305,7 @@ watch(
                                         <span class="text-sm">{{
                                             Number(expense.amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
                                         }}</span>
+                                        <span class="text-xs">{{ expense?.expense_detail?.name }}</span>
                                         <span class="text-xs">{{ format(expense.created_at, 'MMM dd, yyyy hh:mm a') }}</span>
                                     </span>
                                 </li>

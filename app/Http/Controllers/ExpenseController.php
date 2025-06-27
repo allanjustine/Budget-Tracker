@@ -109,7 +109,7 @@ class ExpenseController extends Controller
             $expensedetail = ExpenseDetail::firstOrCreate(['user_id' => Auth::id(), 'name' => $request->expense_detail_others]);
             $expenseDetailId = $expensedetail->id;
         } else {
-            $rules['expense_detail_id'] = ['required', 'exists:expense_categories,id'];
+            $rules['expense_detail_id'] = ['required', 'exists:expense_details,id'];
             $messages['expense_detail_id.required'] = 'Expense detail is required';
             $messages['expense_detail_id.exists'] = 'Selected expense detail does not exist';
             $expenseDetailId = $request->expense_detail_id;
@@ -197,7 +197,7 @@ class ExpenseController extends Controller
             $expensedetail = ExpenseDetail::firstOrCreate(['user_id' => Auth::id(), 'name' => $request->expense_detail_others]);
             $expenseDetailId = $expensedetail->id;
         } else {
-            $rules['expense_detail_id'] = ['required', 'exists:expense_categories,id'];
+            $rules['expense_detail_id'] = ['required', 'exists:expense_details,id'];
             $messages['expense_detail_id.required'] = 'Expense detail is required';
             $messages['expense_detail_id.exists'] = 'Selected expense detail does not exist';
             $expenseDetailId = $request->expense_detail_id;
