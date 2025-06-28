@@ -11,14 +11,14 @@ import { HandCoinsIcon } from 'lucide-vue-next';
     <section class="container mx-auto px-6 py-20">
         <div class="flex flex-col items-center gap-12 md:flex-row">
             <div class="md:w-1/2">
-                <Badge variant="outline" class="mb-4 border-blue-200 bg-blue-50 text-blue-600">New Feature</Badge>
-                <h1 class="mb-6 text-5xl leading-tight font-bold text-gray-900">Take Control of Your <span class="text-blue-600">Finances</span></h1>
-                <p class="mb-8 text-xl text-gray-600">
+                <Badge variant="outline" class="mb-4 border-blue-200 bg-blue-100 p-2 rounded text-blue-600">New Feature</Badge>
+                <h1 class="mb-6 text-5xl leading-tight font-bold text-gray-600 dark:text-gray-200">Take Control of Your <span class="text-blue-600">Finances</span></h1>
+                <p class="mb-8 text-xl text-gray-500 dark:text-gray-400">
                     E-Track helps you manage your expenses effortlessly with beautiful insights and powerful analytics.
                 </p>
                 <div class="flex space-x-4">
                     <Button class="bg-blue-600 px-8 py-6 text-lg text-white hover:bg-blue-700">Get Started</Button>
-                    <Button variant="outline" class="border-gray-300 px-8 py-6 text-lg text-gray-700 hover:bg-gray-50">
+                    <Button variant="outline" class="border-gray-300 px-8 py-6 text-lg text-gray-600 dark:text-gray-300 hover:bg-gray-50">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -38,9 +38,9 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                 </div>
             </div>
             <div class="md:w-1/2">
-                <Card class="border-0 bg-blue-600/80 shadow-xl">
+                <Card class="border-0 bg-blue-600/80 dark:bg-blue-900/80 shadow-xl">
                     <CardHeader>
-                        <CardTitle class="text-xl">Expense Dashboard</CardTitle>
+                        <CardTitle class="text-xl dark:text-gray-300 text-gray-200">Expense Dashboard</CardTitle>
                         <CardDescription class="text-gray-300">Your monthly spending overview</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -72,16 +72,16 @@ import { HandCoinsIcon } from 'lucide-vue-next';
     </section>
 
     <!-- Features Section -->
-    <section class="bg-white py-20">
+    <section class="py-20">
         <div class="container mx-auto px-6">
             <div class="mb-16 text-center">
-                <Badge variant="outline" class="mb-4 border-blue-200 bg-blue-50 text-blue-600">Features</Badge>
-                <h2 class="mb-4 text-4xl font-bold text-gray-900">Powerful Expense Tracking</h2>
-                <p class="mx-auto max-w-2xl text-xl text-gray-600">Everything you need to manage your finances in one beautiful interface</p>
+                <Badge variant="outline" class="mb-4 dark:border-blue-900 dark:bg-blue-900 dark:text-white border-blue-200 bg-blue-50 text-blue-600 p-2 rounded">Features</Badge>
+                <h2 class="mb-4 text-4xl font-bold dark:text-gray-300 text-gray-900">Powerful Expense Tracking</h2>
+                <p class="mx-auto max-w-2xl text-xl dark:text-gray-200 text-gray-600">Everything you need to manage your finances in one beautiful interface</p>
             </div>
 
             <div class="grid gap-8 md:grid-cols-3">
-                <Card class="border-0 bg-blue-600/80 transition duration-300 hover:shadow-lg">
+                <Card class="border-0 dark:bg-blue-900/80 bg-blue-600/80 transition duration-300 hover:shadow-lg">
                     <CardHeader>
                         <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
                             <svg
@@ -102,22 +102,22 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                                 <path d="M16 16h5v5"></path>
                             </svg>
                         </div>
-                        <CardTitle>Real-time Sync</CardTitle>
-                        <CardDescription class="text-gray-300">All your devices updated instantly</CardDescription>
+                        <CardTitle class="dark:text-gray-200 text-gray-100">Real-time Sync</CardTitle>
+                        <CardDescription class="text-gray-200 dark:text-gray-300">All your devices updated instantly</CardDescription>
                     </CardHeader>
                 </Card>
 
-                <Card class="border-0 bg-blue-600/80 transition duration-300 hover:shadow-lg">
+                <Card class="border-0 dark:bg-blue-900/80 bg-blue-600/80 transition duration-300 hover:shadow-lg">
                     <CardHeader>
                         <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
                             <HandCoinsIcon class="text-blue-500" />
                         </div>
-                        <CardTitle>Smart Budgeting</CardTitle>
-                        <CardDescription class="text-gray-300">Automated budget recommendations</CardDescription>
+                        <CardTitle class="dark:text-gray-200 text-gray-100">Smart Budgeting</CardTitle>
+                        <CardDescription class="text-gray-200 dark:text-gray-300">Automated budget recommendations</CardDescription>
                     </CardHeader>
                 </Card>
 
-                <Card class="border-0 bg-blue-600/80 transition duration-300 hover:shadow-lg">
+                <Card class="border-0 dark:bg-blue-900/80 bg-blue-600/80 transition duration-300 hover:shadow-lg">
                     <CardHeader>
                         <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
                             <svg
@@ -135,8 +135,8 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                                 <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
                             </svg>
                         </div>
-                        <CardTitle>Detailed Reports</CardTitle>
-                        <CardDescription class="text-gray-300">Beautiful visualizations of your spending</CardDescription>
+                        <CardTitle class="dark:text-gray-200 text-gray-100">Detailed Reports</CardTitle>
+                        <CardDescription class="text-gray-200 dark:text-gray-300">Beautiful visualizations of your spending</CardDescription>
                     </CardHeader>
                 </Card>
             </div>
@@ -144,16 +144,16 @@ import { HandCoinsIcon } from 'lucide-vue-next';
     </section>
 
     <!-- Testimonials -->
-    <section class="bg-gray-50 py-20">
+    <section class="py-20">
         <div class="container mx-auto px-6">
             <div class="mb-16 text-center">
-                <Badge variant="outline" class="mb-4 border-blue-200 bg-blue-50 text-blue-600">Testimonials</Badge>
-                <h2 class="mb-4 text-4xl font-bold text-gray-900">Trusted by Thousands</h2>
-                <p class="mx-auto max-w-2xl text-xl text-gray-600">Join our community of happy users who transformed their finances</p>
+                <Badge variant="outline" class="mb-4 dark:border-blue-800 border-blue-200 dark:bg-blue-900 p-2 dark:text-white rounded bg-blue-50 text-blue-600">Testimonials</Badge>
+                <h2 class="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-200">Trusted by Thousands</h2>
+                <p class="mx-auto max-w-2xl text-xl text-gray-600 dark:text-gray-300">Join our community of happy users who transformed their finances</p>
             </div>
 
             <div class="grid gap-8 md:grid-cols-3">
-                <Card class="border-0 bg-blue-600/80">
+                <Card class="border-0 bg-blue-600/80 dark:bg-blue-900/80">
                     <CardContent class="pt-6">
                         <div class="mb-4 flex items-center">
                             <Avatar class="mr-4">
@@ -161,7 +161,7 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                                 <AvatarFallback>JD</AvatarFallback>
                             </Avatar>
                             <div>
-                                <p class="font-medium">Jane Doe</p>
+                                <p class="font-medium text-white">Jane Doe</p>
                                 <p class="text-sm text-gray-200">Marketing Director</p>
                             </div>
                         </div>
@@ -171,7 +171,7 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                     </CardContent>
                 </Card>
 
-                <Card class="border-0 bg-blue-600/80">
+                <Card class="border-0 bg-blue-600/80 dark:bg-blue-900/80">
                     <CardContent class="pt-6">
                         <div class="mb-4 flex items-center">
                             <Avatar class="mr-4">
@@ -179,7 +179,7 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                                 <AvatarFallback>JS</AvatarFallback>
                             </Avatar>
                             <div>
-                                <p class="font-medium">John Smith</p>
+                                <p class="font-medium text-white">John Smith</p>
                                 <p class="text-sm text-gray-200">Freelancer</p>
                             </div>
                         </div>
@@ -189,7 +189,7 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                     </CardContent>
                 </Card>
 
-                <Card class="border-0 bg-blue-600/80">
+                <Card class="border-0 bg-blue-600/80 dark:bg-blue-900/80">
                     <CardContent class="pt-6">
                         <div class="mb-4 flex items-center">
                             <Avatar class="mr-4">
@@ -197,7 +197,7 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                                 <AvatarFallback>SR</AvatarFallback>
                             </Avatar>
                             <div>
-                                <p class="font-medium">Sarah Roberts</p>
+                                <p class="font-medium text-white">Sarah Roberts</p>
                                 <p class="text-sm text-gray-200">Small Business Owner</p>
                             </div>
                         </div>
@@ -211,14 +211,14 @@ import { HandCoinsIcon } from 'lucide-vue-next';
     </section>
 
     <!-- CTA Section -->
-    <section class="bg-blue-600 py-20 text-white">
+    <section class="bg-blue-600 dark:bg-blue-800 py-20 text-white">
         <div class="container mx-auto px-6 text-center">
             <h2 class="mb-6 text-4xl font-bold">Ready to Transform Your Finances?</h2>
             <p class="mx-auto mb-8 max-w-2xl text-xl opacity-90">Join thousands of users who took control of their spending with E-Track</p>
             <div class="flex justify-center space-x-4">
                 <Link href="/login"><Button class="bg-white px-8 py-6 text-lg text-blue-600 hover:bg-gray-100">Get Started</Button> </Link>
                 <Link href="#">
-                    <Button variant="outline" class="border-white px-8 py-6 text-lg text-white hover:bg-blue-700">Learn More</Button>
+                    <Button variant="outline" class="border-white px-8 py-6 text-lg text-white hover:text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">Learn More</Button>
                 </Link>
             </div>
         </div>

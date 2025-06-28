@@ -2,16 +2,28 @@
 import BarChart from '@/components/ui/charts/BarChart.vue';
 
 const props = defineProps({
+    loanChart: Object,
+    walletChart: Object,
     expenseChart: Object,
 });
 
 const chartData = {
-    labels: props?.expenseChart?.labels,
+    labels: props?.loanChart?.labels || props?.walletChart?.labels || props?.expenseChart?.labels,
     datasets: [
         {
-            label: 'Expense',
+            label: 'Wallet/Balance',
             backgroundColor: 'violet',
+            data: props?.walletChart?.data,
+        },
+        {
+            label: 'Expense',
+            backgroundColor: 'pink',
             data: props?.expenseChart?.data,
+        },
+        {
+            label: 'Loan',
+            backgroundColor: 'red',
+            data: props?.loanChart?.data,
         },
     ],
 };

@@ -1,22 +1,19 @@
 <script setup lang="ts">
-import ExpenseChart from '@/components/ExpenseChart.vue';
-import LoanChart from '@/components/LoanChart.vue';
+import FinancialSummary from '@/components/FinancialSummary.vue';
+import RecentTransaction from '@/components/RecentTransaction.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import Select from '@/components/ui/select/Select.vue';
 import SelectContent from '@/components/ui/select/SelectContent.vue';
 import SelectItem from '@/components/ui/select/SelectItem.vue';
 import SelectTrigger from '@/components/ui/select/SelectTrigger.vue';
 import SelectValue from '@/components/ui/select/SelectValue.vue';
-import WalletChart from '@/components/WalletChart.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { format, formatDistanceToNowStrict } from 'date-fns';
 import { PhilippinePesoIcon } from 'lucide-vue-next';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,8 +30,6 @@ const drawerItem = ref('');
 
 const viewAs = ref('all');
 
-const chartType = ref('wallet');
-
 defineProps({
     totalBalance: Number,
     totalExpense: Number,
@@ -46,6 +41,7 @@ defineProps({
     walletChart: Object,
     expenseChart: Object,
     loanChart: Object,
+    recentTransactions: Object,
 });
 
 const handleOpenDrawer = (expense: any, item: string) => {
@@ -53,13 +49,6 @@ const handleOpenDrawer = (expense: any, item: string) => {
     drawerItem.value = item;
     isDrawerOpen.value = true;
 };
-
-watch(
-    () => chartType,
-    (newValue) => {
-        console.log(newValue);
-    },
-);
 </script>
 
 <template>
@@ -121,155 +110,202 @@ watch(
                         </Select>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 gap-4 p-3 md:grid-cols-3" v-if="viewAs === 'card' || viewAs === 'all'">
-                    <div class="h-fit rounded-lg border p-2">
-                        <h2 class="mb-3 text-center text-lg font-bold">Remaining Wallet</h2>
-                        <hr class="mb-3" />
-                        <div
-                            class="grid grid-cols-2 py-2"
-                            v-for="(wallet, index) in walletDetails"
-                            :key="index"
-                            :class="{ 'border-b': walletDetails?.length > 1 && walletDetails?.length - 1 !== Number(index) }"
-                        >
-                            <span class="font-bold uppercase"
-                                >{{ wallet.name }}
-                                <span>
-                                    -
-                                    <button
-                                        type="button"
-                                        @click="handleOpenDrawer(wallet, 'wallet')"
-                                        class="rounded-full bg-green-200 px-2 py-0.5 text-xs text-green-800 hover:bg-green-300"
-                                    >
-                                        {{ wallet.wallets_count }}
-                                    </button>
-                                </span>
-                            </span>
-                            <div class="flex flex-col text-end">
-                                <span class="font-thin text-gray-300">{{
-                                    Number(wallet.wallets_sum_amount - wallet.expenses_sum_amount).toLocaleString('en-PH', {
-                                        style: 'currency',
-                                        currency: 'PHP',
-                                    })
-                                }}</span>
-                                <span class="text-xs text-gray-400">{{ format(wallet?.wallets[0]?.created_at, 'MMM dd, yyyy hh:mm a') }}</span>
-                                <span class="text-xs text-gray-400">{{
-                                    formatDistanceToNowStrict(wallet?.wallets[0]?.created_at, { addSuffix: true })
-                                }}</span>
+                <div class="p-3">
+                    <div class="rounded-lg border p-6">
+                        <h2 class="mb-4 text-lg font-bold text-gray-200">Financial Items Log</h2>
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3" v-if="viewAs === 'card' || viewAs === 'all'">
+                            <div class="h-fit rounded-lg border p-2">
+                                <h2 class="mb-3 text-center text-lg font-bold">Remaining Wallet</h2>
+                                <hr class="mb-3" />
+                                <div
+                                    class="grid grid-cols-2 py-2"
+                                    v-for="(wallet, index) in walletDetails"
+                                    :key="index"
+                                    :class="{ 'border-b': walletDetails?.length > 1 && walletDetails?.length - 1 !== Number(index) }"
+                                >
+                                    <span class="font-bold uppercase"
+                                        >{{ wallet.name }}
+                                        <span>
+                                            -
+                                            <button
+                                                type="button"
+                                                @click="handleOpenDrawer(wallet, 'wallet')"
+                                                class="rounded-full bg-green-200 px-2 py-0.5 text-xs text-green-800 hover:bg-green-300"
+                                            >
+                                                {{ wallet.wallets_count }}
+                                            </button>
+                                        </span>
+                                    </span>
+                                    <div class="flex flex-col text-end">
+                                        <span class="font-thin text-gray-300">{{
+                                            Number(wallet.wallets_sum_amount - wallet.expenses_sum_amount).toLocaleString('en-PH', {
+                                                style: 'currency',
+                                                currency: 'PHP',
+                                            })
+                                        }}</span>
+                                        <span class="text-xs text-gray-400">{{
+                                            format(wallet?.wallets[0]?.created_at, 'MMM dd, yyyy hh:mm a')
+                                        }}</span>
+                                        <span class="text-xs text-gray-400">{{
+                                            formatDistanceToNowStrict(wallet?.wallets[0]?.created_at, { addSuffix: true })
+                                        }}</span>
+                                    </div>
+                                </div>
+                                <div v-if="walletDetails?.length === 0" class="text-center">
+                                    <span class="text-gray-400">No wallet found</span>
+                                </div>
                             </div>
-                        </div>
-                        <div v-if="walletDetails?.length === 0" class="text-center">
-                            <span class="text-gray-400">No wallet found</span>
+                            <div class="h-fit rounded-lg border p-2">
+                                <h2 class="mb-3 text-center text-lg font-bold">Expense Details</h2>
+                                <hr class="mb-3" />
+                                <div
+                                    class="grid grid-cols-2 py-2"
+                                    v-for="(expense, index) in expenseDetails"
+                                    :key="index"
+                                    :class="{ 'border-b': expenseDetails?.length > 1 && expenseDetails?.length - 1 !== Number(index) }"
+                                >
+                                    <span class="font-bold uppercase">
+                                        {{ expense.name }}
+                                        <span>
+                                            -
+                                            <button
+                                                type="button"
+                                                @click="handleOpenDrawer(expense, 'expense')"
+                                                class="rounded-full bg-blue-200 px-2 py-0.5 text-xs text-blue-800 hover:bg-blue-300"
+                                            >
+                                                {{ expense.expenses_count }}
+                                            </button>
+                                        </span>
+                                    </span>
+                                    <div class="flex flex-col text-end">
+                                        <span class="font-thin text-gray-300">{{
+                                            Number(expense.expenses_sum_amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
+                                        }}</span>
+                                        <span class="text-xs text-gray-400">{{
+                                            format(expense?.expenses[0]?.created_at, 'MMM dd, yyyy hh:mm a')
+                                        }}</span>
+                                        <span class="text-xs text-gray-400">{{
+                                            formatDistanceToNowStrict(expense?.expenses[0]?.created_at, { addSuffix: true })
+                                        }}</span>
+                                    </div>
+                                </div>
+                                <div v-if="expenseDetails?.length === 0" class="text-center">
+                                    <span class="text-gray-400">No expense found</span>
+                                </div>
+                            </div>
+                            <div class="h-fit rounded-lg border p-2">
+                                <h2 class="mb-3 text-center text-lg font-bold">Loan Details</h2>
+                                <hr class="mb-3" />
+                                <div
+                                    class="grid grid-cols-2 py-2"
+                                    v-for="(loan, index) in loanDetails"
+                                    :class="{ 'border-b': loanDetails?.length > 1 && loanDetails?.length - 1 !== Number(index) }"
+                                    :key="index"
+                                >
+                                    <span class="font-bold uppercase"
+                                        >{{ loan.name }}
+                                        <span>
+                                            -
+                                            <button
+                                                type="button"
+                                                @click="handleOpenDrawer(loan, 'loan')"
+                                                class="rounded-full bg-yellow-200 px-2 py-0.5 text-xs text-yellow-800 hover:bg-yellow-300"
+                                            >
+                                                {{ loan.loans_count }}
+                                            </button>
+                                        </span>
+                                    </span>
+                                    <div class="flex flex-col text-end">
+                                        <span class="font-thin text-gray-300">{{
+                                            Number(loan.loans_sum_amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
+                                        }}</span>
+                                        <span class="text-xs text-gray-400">{{ format(loan?.loans[0]?.created_at, 'MMM dd, yyyy hh:mm a') }}</span>
+                                        <span class="text-xs text-gray-400">{{
+                                            formatDistanceToNowStrict(loan?.loans[0]?.created_at, { addSuffix: true })
+                                        }}</span>
+                                    </div>
+                                </div>
+                                <div v-if="loanDetails?.length === 0" class="text-center">
+                                    <span class="text-gray-400">No loan found</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="h-fit rounded-lg border p-2">
-                        <h2 class="mb-3 text-center text-lg font-bold">Expense Details</h2>
-                        <hr class="mb-3" />
-                        <div
-                            class="grid grid-cols-2 py-2"
-                            v-for="(expense, index) in expenseDetails"
-                            :key="index"
-                            :class="{ 'border-b': expenseDetails?.length > 1 && expenseDetails?.length - 1 !== Number(index) }"
-                        >
-                            <span class="font-bold uppercase">
-                                {{ expense.name }}
-                                <span>
-                                    -
-                                    <button
-                                        type="button"
-                                        @click="handleOpenDrawer(expense, 'expense')"
-                                        class="rounded-full bg-blue-200 px-2 py-0.5 text-xs text-blue-800 hover:bg-blue-300"
-                                    >
-                                        {{ expense.expenses_count }}
-                                    </button>
-                                </span>
-                            </span>
-                            <div class="flex flex-col text-end">
-                                <span class="font-thin text-gray-300">{{
-                                    Number(expense.expenses_sum_amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
-                                }}</span>
-                                <span class="text-xs text-gray-400">{{ format(expense?.expenses[0]?.created_at, 'MMM dd, yyyy hh:mm a') }}</span>
-                                <span class="text-xs text-gray-400">{{
-                                    formatDistanceToNowStrict(expense?.expenses[0]?.created_at, { addSuffix: true })
-                                }}</span>
+                </div>
+                <div class="p-3">
+                    <div class="rounded-lg border">
+                        <div class="overflow-hidden p-6 shadow-sm sm:rounded-lg">
+                            <h2 class="mb-4 text-xl font-semibold text-gray-300">Recent Transactions</h2>
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                                <div class="h-fit rounded-xl border p-3">
+                                    <div class="mb-2 flex justify-between">
+                                        <h2 class="text-sm font-bold text-gray-300">Recent Added to Wallet</h2>
+                                        <Link href="/account-wallets" class="rounded-xl bg-blue-500 px-2 py-1.5 text-xs text-white hover:bg-blue-600"
+                                            >See all</Link
+                                        >
+                                    </div>
+                                    <div class="flex flex-col gap-2 rounded-xl">
+                                        <RecentTransaction
+                                            v-for="(recentWallet, index) in recentTransactions?.recentWallets"
+                                            :key="index"
+                                            :transaction="recentWallet"
+                                            title="wallet"
+                                        />
+                                        <span class="my-5 text-center text-xs" v-if="recentTransactions?.recentWallets?.length === 0">
+                                            No recent added to wallet
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="h-fit rounded-xl border p-3">
+                                    <div class="mb-2 flex justify-between">
+                                        <h2 class="text-sm font-bold text-gray-300">Recent Expenses</h2>
+                                        <Link href="/expenses" class="rounded-xl bg-blue-500 px-2 py-1.5 text-xs text-white hover:bg-blue-600"
+                                            >See all</Link
+                                        >
+                                    </div>
+                                    <div class="flex flex-col gap-2 rounded-xl">
+                                        <RecentTransaction
+                                            v-for="(recentExpense, index) in recentTransactions?.recentExpenses"
+                                            :key="index"
+                                            :transaction="recentExpense"
+                                            title="expense"
+                                        />
+                                        <span class="my-5 text-center text-xs" v-if="recentTransactions?.recentExpenses?.length === 0">
+                                            No recent added to wallet
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="h-fit rounded-xl border p-3">
+                                    <div class="mb-2 flex justify-between">
+                                        <h2 class="text-sm font-bold text-gray-300">Recent Loans</h2>
+                                        <Link href="/loans" class="rounded-xl bg-blue-500 px-2 py-1.5 text-xs text-white hover:bg-blue-600"
+                                            >See all</Link
+                                        >
+                                    </div>
+                                    <div class="flex flex-col gap-2 rounded-xl">
+                                        <RecentTransaction
+                                            v-for="(recenLoan, index) in recentTransactions?.recentLoans"
+                                            :key="index"
+                                            :transaction="recenLoan"
+                                            title="loan"
+                                        />
+                                        <span class="my-5 text-center text-xs" v-if="recentTransactions?.recenLoans?.length === 0">
+                                            No recent added to wallet
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div v-if="expenseDetails?.length === 0" class="text-center">
-                            <span class="text-gray-400">No expense found</span>
-                        </div>
-                    </div>
-                    <div class="h-fit rounded-lg border p-2">
-                        <h2 class="mb-3 text-center text-lg font-bold">Loan Details</h2>
-                        <hr class="mb-3" />
-                        <div
-                            class="grid grid-cols-2 py-2"
-                            v-for="(loan, index) in loanDetails"
-                            :class="{ 'border-b': loanDetails?.length > 1 && loanDetails?.length - 1 !== Number(index) }"
-                            :key="index"
-                        >
-                            <span class="font-bold uppercase"
-                                >{{ loan.name }}
-                                <span>
-                                    -
-                                    <button
-                                        type="button"
-                                        @click="handleOpenDrawer(loan, 'loan')"
-                                        class="rounded-full bg-yellow-200 px-2 py-0.5 text-xs text-yellow-800 hover:bg-yellow-300"
-                                    >
-                                        {{ loan.loans_count }}
-                                    </button>
-                                </span>
-                            </span>
-                            <div class="flex flex-col text-end">
-                                <span class="font-thin text-gray-300">{{
-                                    Number(loan.loans_sum_amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
-                                }}</span>
-                                <span class="text-xs text-gray-400">{{ format(loan?.loans[0]?.created_at, 'MMM dd, yyyy hh:mm a') }}</span>
-                                <span class="text-xs text-gray-400">{{
-                                    formatDistanceToNowStrict(loan?.loans[0]?.created_at, { addSuffix: true })
-                                }}</span>
-                            </div>
-                        </div>
-                        <div v-if="loanDetails?.length === 0" class="text-center">
-                            <span class="text-gray-400">No loan found</span>
                         </div>
                     </div>
                 </div>
                 <div v-if="viewAs === 'chart' || viewAs === 'all'" class="p-3">
-                    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    <div class="mx-auto rounded-lg border">
                         <div class="overflow-hidden p-6 shadow-sm sm:rounded-lg">
                             <div class="flex justify-between">
-                                <h2 class="mb-4 text-xl font-semibold">
-                                    <span v-if="chartType === 'expense'">Expense</span>
-                                    <span v-if="chartType === 'loan'">Loan</span>
-                                    <span v-if="chartType === 'wallet'">Wallet</span>
-                                    Reports
-                                </h2>
-                                <div class="flex items-center gap-1 rounded-lg border p-2">
-                                    <Label
-                                        v-for="(option, index) in ['wallet', 'expense', 'loan']"
-                                        class="flex cursor-pointer items-center gap-2 rounded px-4 py-2 transition-colors duration-300 ease-in-out hover:bg-gray-500/20"
-                                        :class="{ 'bg-gray-500/20': chartType === option }"
-                                        :key="index"
-                                    >
-                                        <Input
-                                            type="radio"
-                                            name="chartType"
-                                            v-model="chartType"
-                                            :value="option"
-                                            class="sr-only h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                        />
-                                        <span class="text-sm font-medium text-gray-200 capitalize">{{ option }}</span>
-                                    </Label>
-                                </div>
+                                <h2 class="mb-4 text-xl font-semibold text-gray-300">Financial Summary</h2>
                             </div>
-                            <div class="h-96" v-if="chartType === 'loan'">
-                                <LoanChart :loanChart="loanChart" />
-                            </div>
-                            <div class="h-96" v-if="chartType === 'wallet'">
-                                <WalletChart :walletChart="walletChart" />
-                            </div>
-                            <div class="h-96" v-if="chartType === 'expense'">
-                                <ExpenseChart :expenseChart="expenseChart" />
+                            <div class="h-96">
+                                <FinancialSummary :loanChart="loanChart" :walletChart="walletChart" :expenseChart="expenseChart" />
                             </div>
                         </div>
                     </div>

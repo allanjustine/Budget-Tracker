@@ -88,6 +88,44 @@ class DashboardController extends Controller
         return $loanChart;
     }
 
+    private function recentTransactions()
+    {
+        $recentWallets = Wallet::with(
+            'bankType'
+        )
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $recentExpenses = Expense::with(
+            'bankType',
+            'expenseCategory',
+            'expenseDetail',
+            'loan',
+            'loanType'
+        )
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $recentLoans = Loan::with(
+            'loanType',
+            'bankType'
+        )
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return [
+            'recentWallets'     => $recentWallets,
+            'recentExpenses'    => $recentExpenses,
+            'recentLoans'       => $recentLoans
+        ];
+    }
+
     public function index()
     {
         $totalBalance = Wallet::totalBalance();
@@ -154,17 +192,20 @@ class DashboardController extends Controller
 
         $loanChart = $this->getLoanChart();
 
+        $recentTransactions = $this->recentTransactions();
+
         return Inertia::render('dashboard/Dashboard', [
-            'grossBalance'      => $totalGross,
-            'totalBalance'      => $remainingBalance,
-            'totalExpense'      => $totalExpense,
-            'totalLoan'         => $remainingLoan,
-            'walletDetails'     => $walletDetails,
-            'expenseDetails'    => $expenseDetails,
-            'loanDetails'       => $loanDetails,
-            'walletChart'       => $walletChart,
-            'expenseChart'      => $expenseChart,
-            'loanChart'         => $loanChart,
+            'grossBalance'          => $totalGross,
+            'totalBalance'          => $remainingBalance,
+            'totalExpense'          => $totalExpense,
+            'totalLoan'             => $remainingLoan,
+            'walletDetails'         => $walletDetails,
+            'expenseDetails'        => $expenseDetails,
+            'loanDetails'           => $loanDetails,
+            'walletChart'           => $walletChart,
+            'expenseChart'          => $expenseChart,
+            'loanChart'             => $loanChart,
+            'recentTransactions'    => $recentTransactions
         ]);
     }
 }
