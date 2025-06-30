@@ -272,7 +272,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                             title="expense"
                                         />
                                         <span class="my-5 text-center text-xs" v-if="recentTransactions?.recentExpenses?.length === 0">
-                                            No recent added to wallet
+                                            No recent expenses
                                         </span>
                                     </div>
                                 </div>
@@ -290,8 +290,8 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                             :transaction="recenLoan"
                                             title="loan"
                                         />
-                                        <span class="my-5 text-center text-xs" v-if="recentTransactions?.recenLoans?.length === 0">
-                                            No recent added to wallet
+                                        <span class="my-5 text-center text-xs" v-if="recentTransactions?.recentLoans?.length === 0">
+                                            No recent loans
                                         </span>
                                     </div>
                                 </div>
