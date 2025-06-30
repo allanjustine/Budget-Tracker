@@ -105,15 +105,16 @@ const handleOpenDrawer = (expense: any, item: string) => {
                             <SelectContent>
                                 <SelectItem value="all"> All </SelectItem>
                                 <SelectItem value="card"> Card Only </SelectItem>
+                                <SelectItem value="recent"> Recent Transactions Only </SelectItem>
                                 <SelectItem value="chart"> Chart Only </SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
                 </div>
-                <div class="p-3">
+                <div class="p-3" v-if="viewAs === 'card' || viewAs === 'all'">
                     <div class="rounded-lg border p-6">
                         <h2 class="mb-4 text-lg font-bold text-gray-200">Financial Items Log</h2>
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3" v-if="viewAs === 'card' || viewAs === 'all'">
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                             <div class="h-fit rounded-lg border p-2">
                                 <h2 class="mb-3 text-center text-lg font-bold">Remaining Wallet</h2>
                                 <hr class="mb-3" />
@@ -232,7 +233,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                         </div>
                     </div>
                 </div>
-                <div class="p-3">
+                <div class="p-3" v-if="viewAs === 'recent' || viewAs === 'all'">
                     <div class="rounded-lg border">
                         <div class="overflow-hidden p-6 shadow-sm sm:rounded-lg">
                             <h2 class="mb-4 text-xl font-semibold text-gray-300">Recent Transactions</h2>
