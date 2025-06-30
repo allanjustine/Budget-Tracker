@@ -26,7 +26,7 @@ const diffForHumans = computed(() => {
 </script>
 
 <template>
-    <Card class="relative transition-shadow hover:shadow-md">
+    <Card class="relative transition-shadow hover:shadow-md hover:bg-gray-100 hover:dark:bg-gray-900">
         <div class="absolute top-1 right-2 text-[10px] text-gray-400">{{ diffForHumans }}</div>
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2 md:flex-col lg:flex-row">
             <div class="flex items-center space-x-4">

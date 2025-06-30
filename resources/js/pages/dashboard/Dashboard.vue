@@ -58,37 +58,37 @@ const handleOpenDrawer = (expense: any, item: string) => {
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <div
-                    class="relative flex aspect-video items-center justify-end overflow-hidden rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+                    class="relative flex aspect-video items-center justify-end overflow-hidden rounded-xl border border-sidebar-border/70 p-4 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-gray-100 hover:shadow-lg dark:border-sidebar-border hover:dark:bg-gray-900"
                 >
                     <PhilippinePesoIcon class="absolute top-4 left-0 h-16 w-16 opacity-30 sm:h-20 sm:w-20" />
-                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-700 dark:text-gray-300 uppercase sm:text-2xl">GROSS</span>
+                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-700 uppercase sm:text-2xl dark:text-gray-300">GROSS</span>
                     <p class="text-lg font-bold sm:text-xl">
                         {{ Number(grossBalance).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
                     </p>
                 </div>
                 <div
-                    class="relative flex aspect-video items-center justify-end overflow-hidden rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+                    class="relative flex aspect-video items-center justify-end overflow-hidden rounded-xl border border-sidebar-border/70 p-4 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-gray-100 hover:shadow-lg dark:border-sidebar-border hover:dark:bg-gray-900"
                 >
                     <PhilippinePesoIcon class="absolute top-4 left-0 h-16 w-16 opacity-30 sm:h-20 sm:w-20" />
-                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-700 dark:text-gray-300 uppercase sm:text-2xl">Balances</span>
+                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-700 uppercase sm:text-2xl dark:text-gray-300">Balances</span>
                     <p class="text-lg font-bold sm:text-xl">
                         {{ Number(totalBalance).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
                     </p>
                 </div>
                 <div
-                    class="relative flex aspect-video items-center justify-end overflow-hidden rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+                    class="relative flex aspect-video items-center justify-end overflow-hidden rounded-xl border border-sidebar-border/70 p-4 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-gray-100 hover:shadow-lg dark:border-sidebar-border hover:dark:bg-gray-900"
                 >
                     <PhilippinePesoIcon class="absolute top-4 left-0 h-16 w-16 opacity-30 sm:h-20 sm:w-20" />
-                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-700 dark:text-gray-300 uppercase sm:text-2xl">Expenses</span>
+                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-700 uppercase sm:text-2xl dark:text-gray-300">Expenses</span>
                     <p class="text-lg font-bold sm:text-xl">
                         {{ Number(totalExpense).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
                     </p>
                 </div>
                 <div
-                    class="relative flex aspect-video items-center justify-end overflow-hidden rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+                    class="relative flex aspect-video items-center justify-end overflow-hidden rounded-xl border border-sidebar-border/70 p-4 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-gray-100 hover:shadow-lg dark:border-sidebar-border hover:dark:bg-gray-900"
                 >
                     <PhilippinePesoIcon class="absolute top-4 left-0 h-16 w-16 opacity-30 sm:h-20 sm:w-20" />
-                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-700 dark:text-gray-300 uppercase sm:text-2xl">LOANS</span>
+                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-700 uppercase sm:text-2xl dark:text-gray-300">LOANS</span>
                     <p class="text-lg font-bold sm:text-xl">
                         {{ Number(totalLoan).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
                     </p>
@@ -115,11 +115,11 @@ const handleOpenDrawer = (expense: any, item: string) => {
                     <div class="rounded-lg border p-6">
                         <h2 class="mb-4 text-lg font-bold text-gray-500 dark:text-gray-200">Financial Items Log</h2>
                         <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <div class="h-fit rounded-lg border p-2">
+                            <div class="h-fit rounded-lg border p-2 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
                                 <h2 class="mb-3 text-center text-lg font-bold">Remaining Wallet</h2>
                                 <hr class="mb-3" />
                                 <div
-                                    class="grid grid-cols-2 py-2"
+                                    class="grid grid-cols-2 p-2 hover:bg-gray-100 hover:dark:bg-gray-900"
                                     v-for="(wallet, index) in walletDetails"
                                     :key="index"
                                     :class="{ 'border-b': walletDetails?.length > 1 && walletDetails?.length - 1 !== Number(index) }"
@@ -156,11 +156,11 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                     <span class="text-gray-400">No wallet found</span>
                                 </div>
                             </div>
-                            <div class="h-fit rounded-lg border p-2">
+                            <div class="h-fit rounded-lg border p-2 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
                                 <h2 class="mb-3 text-center text-lg font-bold">Expense Details</h2>
                                 <hr class="mb-3" />
                                 <div
-                                    class="grid grid-cols-2 py-2"
+                                    class="grid grid-cols-2 p-2 hover:bg-gray-100 hover:dark:bg-gray-900"
                                     v-for="(expense, index) in expenseDetails"
                                     :key="index"
                                     :class="{ 'border-b': expenseDetails?.length > 1 && expenseDetails?.length - 1 !== Number(index) }"
@@ -194,11 +194,11 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                     <span class="text-gray-400">No expense found</span>
                                 </div>
                             </div>
-                            <div class="h-fit rounded-lg border p-2">
+                            <div class="h-fit rounded-lg border p-2 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
                                 <h2 class="mb-3 text-center text-lg font-bold">Loan Details</h2>
                                 <hr class="mb-3" />
                                 <div
-                                    class="grid grid-cols-2 py-2"
+                                    class="grid grid-cols-2 p-2 hover:bg-gray-100 hover:dark:bg-gray-900"
                                     v-for="(loan, index) in loanDetails"
                                     :class="{ 'border-b': loanDetails?.length > 1 && loanDetails?.length - 1 !== Number(index) }"
                                     :key="index"
@@ -238,7 +238,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                         <div class="overflow-hidden p-6 shadow-sm sm:rounded-lg">
                             <h2 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-300">Recent Transactions</h2>
                             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                                <div class="h-fit rounded-xl border p-3">
+                                <div class="h-fit rounded-xl border p-3 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
                                     <div class="mb-2 flex justify-between">
                                         <h2 class="text-sm font-bold text-gray-700 dark:text-gray-300">Recent Added to Wallet</h2>
                                         <Link href="/account-wallets" class="rounded-xl bg-blue-500 px-2 py-1.5 text-xs text-white hover:bg-blue-600"
@@ -257,7 +257,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                         </span>
                                     </div>
                                 </div>
-                                <div class="h-fit rounded-xl border p-3">
+                                <div class="h-fit rounded-xl border p-3 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
                                     <div class="mb-2 flex justify-between">
                                         <h2 class="text-sm font-bold text-gray-700 dark:text-gray-300">Recent Expenses</h2>
                                         <Link href="/expenses" class="rounded-xl bg-blue-500 px-2 py-1.5 text-xs text-white hover:bg-blue-600"
@@ -276,7 +276,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                         </span>
                                     </div>
                                 </div>
-                                <div class="h-fit rounded-xl border p-3">
+                                <div class="h-fit rounded-xl border p-3 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
                                     <div class="mb-2 flex justify-between">
                                         <h2 class="text-sm font-bold text-gray-700 dark:text-gray-300">Recent Loans</h2>
                                         <Link href="/loans" class="rounded-xl bg-blue-500 px-2 py-1.5 text-xs text-white hover:bg-blue-600"
