@@ -61,7 +61,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                     class="relative flex aspect-video items-center justify-end overflow-hidden rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
                 >
                     <PhilippinePesoIcon class="absolute top-4 left-0 h-16 w-16 opacity-30 sm:h-20 sm:w-20" />
-                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-300 uppercase sm:text-2xl">GROSS</span>
+                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-700 dark:text-gray-300 uppercase sm:text-2xl">GROSS</span>
                     <p class="text-lg font-bold sm:text-xl">
                         {{ Number(grossBalance).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
                     </p>
@@ -70,7 +70,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                     class="relative flex aspect-video items-center justify-end overflow-hidden rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
                 >
                     <PhilippinePesoIcon class="absolute top-4 left-0 h-16 w-16 opacity-30 sm:h-20 sm:w-20" />
-                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-300 uppercase sm:text-2xl">Balances</span>
+                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-700 dark:text-gray-300 uppercase sm:text-2xl">Balances</span>
                     <p class="text-lg font-bold sm:text-xl">
                         {{ Number(totalBalance).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
                     </p>
@@ -79,7 +79,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                     class="relative flex aspect-video items-center justify-end overflow-hidden rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
                 >
                     <PhilippinePesoIcon class="absolute top-4 left-0 h-16 w-16 opacity-30 sm:h-20 sm:w-20" />
-                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-300 uppercase sm:text-2xl">Expenses</span>
+                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-700 dark:text-gray-300 uppercase sm:text-2xl">Expenses</span>
                     <p class="text-lg font-bold sm:text-xl">
                         {{ Number(totalExpense).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
                     </p>
@@ -88,7 +88,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                     class="relative flex aspect-video items-center justify-end overflow-hidden rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
                 >
                     <PhilippinePesoIcon class="absolute top-4 left-0 h-16 w-16 opacity-30 sm:h-20 sm:w-20" />
-                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-300 uppercase sm:text-2xl">LOANS</span>
+                    <span class="absolute top-3 right-2 text-xl font-bold text-gray-700 dark:text-gray-300 uppercase sm:text-2xl">LOANS</span>
                     <p class="text-lg font-bold sm:text-xl">
                         {{ Number(totalLoan).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
                     </p>
@@ -96,7 +96,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
             </div>
             <div class="relative min-h-[50vh] flex-1 rounded-xl border border-sidebar-border/70 sm:min-h-[60vh] dark:border-sidebar-border">
                 <div class="flex justify-between">
-                    <h2 class="pt-5 pl-5 text-lg font-bold text-gray-200">Other Details</h2>
+                    <h2 class="pt-5 pl-5 text-lg font-bold text-gray-500 dark:text-gray-200">Other Details</h2>
                     <div class="pt-5 pr-5">
                         <Select v-model="viewAs">
                             <SelectTrigger class="w-[200px]">
@@ -113,7 +113,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                 </div>
                 <div class="p-3" v-if="viewAs === 'card' || viewAs === 'all'">
                     <div class="rounded-lg border p-6">
-                        <h2 class="mb-4 text-lg font-bold text-gray-200">Financial Items Log</h2>
+                        <h2 class="mb-4 text-lg font-bold text-gray-500 dark:text-gray-200">Financial Items Log</h2>
                         <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                             <div class="h-fit rounded-lg border p-2">
                                 <h2 class="mb-3 text-center text-lg font-bold">Remaining Wallet</h2>
@@ -138,7 +138,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                         </span>
                                     </span>
                                     <div class="flex flex-col text-end">
-                                        <span class="font-thin text-gray-300">{{
+                                        <span class="font-thin text-gray-700 dark:text-gray-300">{{
                                             Number(wallet.wallets_sum_amount - wallet.expenses_sum_amount).toLocaleString('en-PH', {
                                                 style: 'currency',
                                                 currency: 'PHP',
@@ -179,7 +179,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                         </span>
                                     </span>
                                     <div class="flex flex-col text-end">
-                                        <span class="font-thin text-gray-300">{{
+                                        <span class="font-thin text-gray-700 dark:text-gray-300">{{
                                             Number(expense.expenses_sum_amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
                                         }}</span>
                                         <span class="text-xs text-gray-400">{{
@@ -217,7 +217,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                         </span>
                                     </span>
                                     <div class="flex flex-col text-end">
-                                        <span class="font-thin text-gray-300">{{
+                                        <span class="font-thin text-gray-700 dark:text-gray-300">{{
                                             Number(loan.loans_sum_amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
                                         }}</span>
                                         <span class="text-xs text-gray-400">{{ format(loan?.loans[0]?.created_at, 'MMM dd, yyyy hh:mm a') }}</span>
@@ -236,11 +236,11 @@ const handleOpenDrawer = (expense: any, item: string) => {
                 <div class="p-3" v-if="viewAs === 'recent' || viewAs === 'all'">
                     <div class="rounded-lg border">
                         <div class="overflow-hidden p-6 shadow-sm sm:rounded-lg">
-                            <h2 class="mb-4 text-xl font-semibold text-gray-300">Recent Transactions</h2>
+                            <h2 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-300">Recent Transactions</h2>
                             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                                 <div class="h-fit rounded-xl border p-3">
                                     <div class="mb-2 flex justify-between">
-                                        <h2 class="text-sm font-bold text-gray-300">Recent Added to Wallet</h2>
+                                        <h2 class="text-sm font-bold text-gray-700 dark:text-gray-300">Recent Added to Wallet</h2>
                                         <Link href="/account-wallets" class="rounded-xl bg-blue-500 px-2 py-1.5 text-xs text-white hover:bg-blue-600"
                                             >See all</Link
                                         >
@@ -259,7 +259,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                 </div>
                                 <div class="h-fit rounded-xl border p-3">
                                     <div class="mb-2 flex justify-between">
-                                        <h2 class="text-sm font-bold text-gray-300">Recent Expenses</h2>
+                                        <h2 class="text-sm font-bold text-gray-700 dark:text-gray-300">Recent Expenses</h2>
                                         <Link href="/expenses" class="rounded-xl bg-blue-500 px-2 py-1.5 text-xs text-white hover:bg-blue-600"
                                             >See all</Link
                                         >
@@ -278,7 +278,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                 </div>
                                 <div class="h-fit rounded-xl border p-3">
                                     <div class="mb-2 flex justify-between">
-                                        <h2 class="text-sm font-bold text-gray-300">Recent Loans</h2>
+                                        <h2 class="text-sm font-bold text-gray-700 dark:text-gray-300">Recent Loans</h2>
                                         <Link href="/loans" class="rounded-xl bg-blue-500 px-2 py-1.5 text-xs text-white hover:bg-blue-600"
                                             >See all</Link
                                         >
@@ -303,7 +303,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                     <div class="mx-auto rounded-lg border">
                         <div class="overflow-hidden p-6 shadow-sm sm:rounded-lg">
                             <div class="flex justify-between">
-                                <h2 class="mb-4 text-xl font-semibold text-gray-300">Financial Summary</h2>
+                                <h2 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-300">Financial Summary</h2>
                             </div>
                             <div class="h-96">
                                 <FinancialSummary :loanChart="loanChart" :walletChart="walletChart" :expenseChart="expenseChart" />
