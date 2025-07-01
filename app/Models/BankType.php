@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class BankType extends Model
 {
@@ -16,6 +17,11 @@ class BankType extends Model
     public function loans()
     {
         return $this->hasMany(Loan::class);
+    }
+
+    public function loanExpenses()
+    {
+        return $this->hasManyThrough(Expense::class, Loan::class);
     }
 
     public function expenses()

@@ -51,6 +51,7 @@ const form = useForm({
     expense_detail_others: '',
     loan_id: '',
     loan_type_id: '',
+    remaining_balance: 0,
 });
 
 const modalOpen = ref(false);
@@ -144,9 +145,24 @@ function resetIfOthers(fieldItem: string, fieldOthers: string) {
     );
 }
 
+watch(
+    () => [form.loan_id, form.expense_category_others, form.bank_type_id],
+    () => {
+        if (form.expense_category_others.toLowerCase() === 'loans') {
+            const loan = props.loans?.find((l: any) => l.id === form.loan_id);
+            form.remaining_balance = Number(loan?.amount) - Number(loan?.expenses_sum_amount);
+        } else {
+            const bankType = props.bankTypes?.find((b: any) => b.id === form.bank_type_id);
+            form.remaining_balance =
+                Number(bankType?.wallets_sum_amount) + (Number(bankType?.loans_sum_amount) - Number(bankType?.expenses_sum_amount));
+        }
+    },
+    { immediate: true },
+);
+
 resetIfOthers('bank_type_id', 'bank_type_others');
-resetIfOthers('expense_category_id', 'expense_category_others');
-resetIfOthers('expense_detail_id', 'expense_detail_others');
+resetIfOthers('expense_category_id', 'loan_id');
+resetIfOthers('expense_category_id', 'loan_type_id');
 
 watch(
     () => form.expense_category_id,
@@ -182,6 +198,7 @@ const handleAlertDialogOpen = (item: number) => {
                                     :class="form.errors.amount && 'border-red-500'"
                                     placeholder="Enter Amount"
                                     v-model="form.amount"
+                                    step="any"
                                 />
                                 <InputError :message="form.errors.amount" />
                             </div>
@@ -221,6 +238,9 @@ const handleAlertDialogOpen = (item: number) => {
                                         <SelectItem v-for="(loanType, index) in loanTypes" :key="index" :value="loanType.id">
                                             {{ loanType.name }}
                                         </SelectItem>
+                                        <SelectItem value="No loan type available " disabled v-if="loanTypes?.length === 0">
+                                            No loan type available
+                                        </SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <InputError :message="form.errors.loan_type_id" />
@@ -259,14 +279,31 @@ const handleAlertDialogOpen = (item: number) => {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem
-                                            v-for="(loan, index) in loans?.filter((loan: any) => loan.loan_type_id === form.loan_type_id)"
+                                            v-for="(loan, index) in loans?.filter(
+                                                (loan: any) => loan?.loan_type_id === form?.loan_type_id && loan?.amount > loan?.expenses_sum_amount,
+                                            )"
                                             :key="index"
                                             :value="loan.id"
                                         >
-                                            {{ loan.bank_type.name }} - ({{
-                                                Number(loan.amount).toLocaleString('en-US', { style: 'currency', currency: 'PHP' })
+                                            {{ loan.bank_type.name }} - (Remaining:
+                                            {{
+                                                Number(Number(loan.amount) - Number(loan.expenses_sum_amount)).toLocaleString('en-US', {
+                                                    style: 'currency',
+                                                    currency: 'PHP',
+                                                })
                                             }})
                                         </SelectItem>
+                                        <SelectItem
+                                            v-if="
+                                                loans?.filter(
+                                                    (loan: any) =>
+                                                        loan?.loan_type_id === form?.loan_type_id && loan?.amount > loan?.expenses_sum_amount,
+                                                )?.length === 0
+                                            "
+                                            disabled
+                                            value="No loan availed available"
+                                            >No loan availed available</SelectItem
+                                        >
                                     </SelectContent>
                                 </Select>
                                 <InputError :message="form.errors.loan_id" />
@@ -279,9 +316,15 @@ const handleAlertDialogOpen = (item: number) => {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem v-for="(bankType, index) in bankTypes" :key="index" :value="bankType.id">
-                                            {{ bankType.name }}
+                                            {{ bankType.name }} (Remaining balance:
+                                            {{
+                                                Number(
+                                                    Number(bankType?.wallets_sum_amount) +
+                                                        (Number(bankType?.loans_sum_amount) - Number(bankType?.expenses_sum_amount)),
+                                                )?.toLocaleString('en-US', { style: 'currency', currency: 'PHP' })
+                                            }})
                                         </SelectItem>
-                                        <SelectItem value="others"> Others </SelectItem>
+                                        <!-- <SelectItem value="others"> Others </SelectItem> -->
                                     </SelectContent>
                                 </Select>
                                 <InputError :message="form.errors.bank_type_id" />
@@ -323,8 +366,11 @@ const handleAlertDialogOpen = (item: number) => {
                         <TableCell> {{ expenseWallet?.bank_type?.name }}</TableCell>
                         <TableCell>
                             <p>{{ expenseWallet?.expense_category?.name }}</p>
-                            <p class="text-gray-500 capitalize">{{ expenseWallet?.loan_type?.name }}</p>
-                            <p class="text-gray-500">{{ expenseWallet?.loan?.bank_type?.name }}</p>
+                            <p class="text-gray-500 capitalize" v-if="expenseWallet?.loan_type">Loan type: {{ expenseWallet?.loan_type?.name }}</p>
+                            <p class="text-gray-500 capitalize" v-if="expenseWallet?.loan">
+                                Loan expensed: {{ expenseWallet?.loan?.loan_type?.name }}
+                            </p>
+                            <p class="text-gray-500 capitalize" v-if="expenseWallet?.loan">Loan bank: {{ expenseWallet?.loan?.bank_type?.name }}</p>
                         </TableCell>
                         <TableCell>
                             {{ expenseWallet?.expense_detail?.name }}
@@ -357,6 +403,7 @@ const handleAlertDialogOpen = (item: number) => {
                                         :class="form.errors.amount && 'border-red-500'"
                                         placeholder="Enter Amount"
                                         v-model="form.amount"
+                                        step="any"
                                     />
                                     <InputError :message="form.errors.amount" />
                                 </div>
@@ -426,6 +473,9 @@ const handleAlertDialogOpen = (item: number) => {
                                             <SelectItem v-for="(loanType, index) in loanTypes" :key="index" :value="loanType.id">
                                                 {{ loanType.name }}
                                             </SelectItem>
+                                            <SelectItem value="No loan type available " disabled v-if="loanTypes?.length === 0">
+                                                No loan type available
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <InputError :message="form.errors.loan_type_id" />
@@ -438,14 +488,31 @@ const handleAlertDialogOpen = (item: number) => {
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem
-                                                v-for="(loan, index) in loans?.filter((loan: any) => loan.loan_type_id === form.loan_type_id)"
+                                                v-for="(loan, index) in loans?.filter(
+                                                    (loan: any) =>
+                                                        loan?.loan_type_id === form?.loan_type_id && loan?.amount > loan?.expenses_sum_amount,
+                                                )"
                                                 :key="index"
                                                 :value="loan.id"
                                             >
                                                 {{ loan.bank_type.name }} - ({{
-                                                    Number(loan.amount).toLocaleString('en-US', { style: 'currency', currency: 'PHP' })
+                                                    Number(Number(loan.amount) - Number(loan.expenses_sum_amount)).toLocaleString('en-US', {
+                                                        style: 'currency',
+                                                        currency: 'PHP',
+                                                    })
                                                 }})
                                             </SelectItem>
+                                            <SelectItem
+                                                v-if="
+                                                    loans?.filter(
+                                                        (loan: any) =>
+                                                            loan?.loan_type_id === form?.loan_type_id && loan?.amount > loan?.expenses_sum_amount,
+                                                    )?.length === 0
+                                                "
+                                                disabled
+                                                value="No loan availed available"
+                                                >No loan availed available</SelectItem
+                                            >
                                         </SelectContent>
                                     </Select>
                                     <InputError :message="form.errors.loan_id" />
@@ -458,9 +525,18 @@ const handleAlertDialogOpen = (item: number) => {
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem v-for="(bankType, index) in bankTypes" :key="index" :value="bankType.id">
-                                                {{ bankType.name }}
+                                                {{ bankType.name }} (Remaining balance:
+                                                {{
+                                                    Number(
+                                                        Number(bankType?.wallets_sum_amount) +
+                                                            (Number(bankType?.loans_sum_amount) - Number(bankType?.expenses_sum_amount)),
+                                                    )?.toLocaleString('en-US', {
+                                                        style: 'currency',
+                                                        currency: 'PHP',
+                                                    })
+                                                }})
                                             </SelectItem>
-                                            <SelectItem value="others"> Others </SelectItem>
+                                            <!-- <SelectItem value="others"> Others </SelectItem> -->
                                         </SelectContent>
                                     </Select>
                                     <InputError :message="form.errors.bank_type_id" />

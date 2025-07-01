@@ -41,7 +41,7 @@ const diffForHumans = computed(() => {
             </div>
             <div class="flex flex-col items-end">
                 <CardTitle class="flex text-sm font-medium"
-                    ><span>{{ title === 'wallet' ? '+' : '-' }}</span> <span>{{ formattedAmount }}</span></CardTitle
+                    ><span>{{ title === 'expense' ? '-' : '+' }}</span> <span>{{ formattedAmount }}</span></CardTitle
                 >
             </div>
         </CardHeader>

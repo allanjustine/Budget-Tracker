@@ -161,6 +161,7 @@ const handleAlertDialogOpen = (item: number) => {
                                     :class="form.errors.amount && 'border-red-500'"
                                     placeholder="Enter Amount"
                                     v-model="form.amount"
+                                    step="any"
                                 />
                                 <InputError :message="form.errors.amount" />
                             </div>
@@ -188,7 +189,8 @@ const handleAlertDialogOpen = (item: number) => {
                                         <SelectItem v-for="(bankType, index) in bankTypes" :key="index" :value="bankType.id">
                                             {{ bankType.name }}
                                         </SelectItem>
-                                        <SelectItem value="others"> Others </SelectItem>
+                                        <!-- <SelectItem value="others"> Others </SelectItem> -->
+                                        <SelectItem value="No bank availalbe" v-if="bankTypes?.length === 0" disabled> No bank availalbe </SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <InputError :message="form.errors.bank_type_id" />
@@ -254,6 +256,7 @@ const handleAlertDialogOpen = (item: number) => {
                                         :class="form.errors.amount && 'border-red-500'"
                                         placeholder="Enter Amount"
                                         v-model="form.amount"
+                                        step="any"
                                     />
                                     <InputError :message="form.errors.amount" />
                                 </div>
@@ -281,7 +284,10 @@ const handleAlertDialogOpen = (item: number) => {
                                             <SelectItem v-for="(bankType, index) in bankTypes" :key="index" :value="bankType.id">
                                                 {{ bankType.name }}
                                             </SelectItem>
-                                            <SelectItem value="others"> Others </SelectItem>
+                                            <!-- <SelectItem value="others"> Others </SelectItem> -->
+                                            <SelectItem value="No bank availalbe" v-if="bankTypes?.length === 0" disabled>
+                                                No bank availalbe
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <InputError :message="form.errors.bank_type_id" />

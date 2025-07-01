@@ -20,22 +20,42 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        $expenseWallets = Expense::with('bankType', 'expenseCategory', 'loanType', 'loan.bankType', 'expenseDetail')
+        $expenseWallets = Expense::with('bankType', 'expenseCategory', 'loanType', 'loan.bankType', 'loan.loanType', 'expenseDetail')
             ->where('user_id', Auth::id())
             ->latest()
             ->get();
 
-        $bankTypes = BankType::all();
+        $bankTypes = BankType::withSum(
+            [
+                'wallets' => fn($wallet) => $wallet->where('user_id', Auth::id()),
+                'expenses' => fn($expense) => $expense->where('user_id', Auth::id()),
+                'loans' => fn($loan) => $loan->where('user_id', Auth::id())
+            ],
+            'amount'
+        )
+            ->whereHas('wallets', fn($wallet) => $wallet->where('user_id', Auth::id()))
+            ->latest()
+            ->get();
 
         $expenseCategories = ExpenseCategory::all();
 
-        $loanTypes = LoanType::whereHas('loans', fn($loan) => $loan->where('user_id', Auth::id())->whereDoesntHave('expenses'))
+        $loanTypes = LoanType::withSum([
+            'loans' => fn($loan) => $loan->where('user_id', Auth::id()),
+            'expenses' => fn($expense) => $expense->where('user_id', Auth::id())
+        ], 'amount')
+            ->whereHas('loans', fn($loan) => $loan->where('user_id', Auth::id()))
             ->latest()
-            ->get();
+            ->get()
+            ->filter(fn($loanType) => $loanType->loans_sum_amount > $loanType->expenses_sum_amount);
 
         $loans = Loan::with('bankType', 'loanType')
+            ->withSum(
+                [
+                    'expenses' => fn($expense) => $expense->where('user_id', Auth::id())
+                ],
+                'amount'
+            )
             ->where('user_id', Auth::id())
-            ->whereDoesntHave('expenses')
             ->latest()
             ->get();
 
@@ -66,13 +86,15 @@ class ExpenseController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'amount'                                   => ['required', 'numeric', 'min:1'],
+            'remaining_balance'                        => ['nullable'],
+            'amount'                                   => ['required', 'numeric', 'min:1', 'lte:remaining_balance'],
             'loan_type_id'                             => ['nullable', 'required_if:expense_category_others,loans', 'required_if:expense_category_others,Loans'],
             'loan_id'                                  => ['nullable', 'required_if:expense_category_others,loans', 'required_if:expense_category_others,Loans'],
         ];
 
         $messages = [
             'amount.required'                          => 'Amount is required',
+            'amount.lte'                               => 'Your bank type is insufficient balance or selecting loan to expense is insufficient balance',
             'amount.numeric'                           => 'Amount must be a number',
             'amount.min'                               => 'Amount must be greater than 1',
             'loan_type_id.required_if'                 => 'Loan Type is required if expense category others is loans',
@@ -154,13 +176,15 @@ class ExpenseController extends Controller
         $wallet = Expense::findOrFail($id);
 
         $rules = [
-            'amount'                                   => ['required', 'numeric', 'min:1'],
+            'remaining_balance'                        => ['nullable'],
+            'amount'                                   => ['required', 'numeric', 'min:1', 'lte:remaining_balance'],
             'loan_type_id'                             => ['nullable', 'required_if:expense_category_others,loans', 'required_if:expense_category_others,Loans'],
             'loan_id'                                  => ['nullable', 'required_if:expense_category_others,loans', 'required_if:expense_category_others,Loans'],
         ];
 
         $messages = [
             'amount.required'                          => 'Amount is required',
+            'amount.lte'                               => 'Amount must be below or equal to remaining balance',
             'amount.numeric'                           => 'Amount must be a number',
             'amount.min'                               => 'Amount must be greater than 1',
             'loan_type_id.required_if'                 => 'Loan Type is required if expense category others is loans',

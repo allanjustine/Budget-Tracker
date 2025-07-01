@@ -153,6 +153,7 @@ const handleAlertDialogOpen = (item: number) => {
                                     id="amount"
                                     :class="form.errors.amount && 'border-red-500'"
                                     placeholder="Enter Amount"
+                                    step="any"
                                     v-model="form.amount"
                                 />
                                 <InputError :message="form.errors.amount" />
@@ -233,6 +234,7 @@ const handleAlertDialogOpen = (item: number) => {
                                         :class="form.errors.amount && 'border-red-500'"
                                         placeholder="Enter Amount"
                                         v-model="form.amount"
+                                        step="any"
                                     />
                                     <InputError :message="form.errors.amount" />
                                 </div>

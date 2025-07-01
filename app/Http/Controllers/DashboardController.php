@@ -102,7 +102,8 @@ class DashboardController extends Controller
             'bankType',
             'expenseCategory',
             'expenseDetail',
-            'loan',
+            'loan.loanType',
+            'loan.bankType',
             'loanType'
         )
             ->where('user_id', Auth::id())
@@ -150,7 +151,11 @@ class DashboardController extends Controller
                 'wallets' => fn($wallet) => $wallet->where('user_id', Auth::id()),
             ])
             ->withSum(
-                ['wallets' => fn($wallet) => $wallet->where('user_id', Auth::id()), 'expenses' => fn($wallet) => $wallet->where('user_id', Auth::id())],
+                [
+                    'wallets' => fn($wallet) => $wallet->where('user_id', Auth::id()),
+                    'expenses' => fn($wallet) => $wallet->where('user_id', Auth::id()),
+                    'loans' => fn($wallet) => $wallet->where('user_id', Auth::id())
+                ],
                 'amount',
             )
             ->get();
@@ -159,7 +164,8 @@ class DashboardController extends Controller
             'expenses' => fn($expense) => $expense->where('user_id', Auth::id())->latest(),
             'expenses.expenseCategory',
             'expenses.loanType',
-            'expenses.loan',
+            'expenses.loan.loanType',
+            'expenses.loan.bankType',
             'expenses.expenseDetail'
         ])
             ->withCount([
@@ -174,14 +180,17 @@ class DashboardController extends Controller
 
         $loanDetails = BankType::with([
             'loans' => fn($loan) => $loan->where('user_id', Auth::id())->latest(),
-            'loans.loanType'
+            'loans.loanType',
         ])
             ->whereHas('loans', fn($loan) => $loan->where('user_id', Auth::id()))
             ->withCount([
                 'loans' => fn($wallet) => $wallet->where('user_id', Auth::id())->latest()
             ])
             ->withSum(
-                ['loans' => fn($loan) => $loan->where('user_id', Auth::id())],
+                [
+                    'loans' => fn($loan) => $loan->where('user_id', Auth::id()),
+                    'loanExpenses' => fn($q) => $q->where('loans.user_id', Auth::id())
+                ],
                 'amount'
             )
             ->get();

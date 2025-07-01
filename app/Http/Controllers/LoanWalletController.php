@@ -24,7 +24,9 @@ class LoanWalletController extends Controller
 
         $loanTypes = LoanType::all();
 
-        $bankTypes = BankType::all();
+        $bankTypes = BankType::whereHas('wallets', fn($wallet) => $wallet->where('user_id', Auth::id()))
+            ->latest()
+            ->get();
 
         return Inertia::render('loans/LoanWallet', [
             'loanWallets'         => $loanWallets,

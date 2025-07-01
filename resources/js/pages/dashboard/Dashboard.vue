@@ -10,6 +10,7 @@ import SelectTrigger from '@/components/ui/select/SelectTrigger.vue';
 import SelectValue from '@/components/ui/select/SelectValue.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
+import { formattedAmount } from '@/utils/formattedAmount';
 import { Head, Link } from '@inertiajs/vue3';
 import { format, formatDistanceToNowStrict } from 'date-fns';
 import { PhilippinePesoIcon } from 'lucide-vue-next';
@@ -30,7 +31,7 @@ const drawerItem = ref('');
 
 const viewAs = ref('all');
 
-defineProps({
+const props = defineProps({
     totalBalance: Number,
     totalExpense: Number,
     totalLoan: Number,
@@ -44,10 +45,15 @@ defineProps({
     recentTransactions: Object,
 });
 
-const handleOpenDrawer = (expense: any, item: string) => {
-    drawerData.value = expense;
+const handleOpenDrawer = (data: any, item: string) => {
+    drawerData.value = data;
     drawerItem.value = item;
     isDrawerOpen.value = true;
+    console.log(data);
+};
+
+const toFormattedAmount = (amount: number | string) => {
+    return formattedAmount(amount);
 };
 </script>
 
@@ -139,7 +145,11 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                     </span>
                                     <div class="flex flex-col text-end">
                                         <span class="font-thin text-gray-700 dark:text-gray-300">{{
-                                            Number(wallet.wallets_sum_amount - wallet.expenses_sum_amount).toLocaleString('en-PH', {
+                                            Number(
+                                                Number(wallet.wallets_sum_amount) -
+                                                    Number(wallet.expenses_sum_amount) +
+                                                    Number(wallet.loans_sum_amount),
+                                            ).toLocaleString('en-PH', {
                                                 style: 'currency',
                                                 currency: 'PHP',
                                             })
@@ -157,7 +167,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                 </div>
                             </div>
                             <div class="h-fit rounded-lg border p-2 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
-                                <h2 class="mb-3 text-center text-lg font-bold">Expense Details</h2>
+                                <h2 class="mb-3 text-center text-lg font-bold">Expensed Details</h2>
                                 <hr class="mb-3" />
                                 <div
                                     class="grid grid-cols-2 p-2 hover:bg-gray-100 hover:dark:bg-gray-900"
@@ -195,7 +205,7 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                 </div>
                             </div>
                             <div class="h-fit rounded-lg border p-2 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
-                                <h2 class="mb-3 text-center text-lg font-bold">Loan Details</h2>
+                                <h2 class="mb-3 text-center text-lg font-bold">Remaining Loan</h2>
                                 <hr class="mb-3" />
                                 <div
                                     class="grid grid-cols-2 p-2 hover:bg-gray-100 hover:dark:bg-gray-900"
@@ -218,7 +228,10 @@ const handleOpenDrawer = (expense: any, item: string) => {
                                     </span>
                                     <div class="flex flex-col text-end">
                                         <span class="font-thin text-gray-700 dark:text-gray-300">{{
-                                            Number(loan.loans_sum_amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
+                                            Number(Number(loan.loans_sum_amount) - Number(loan.loan_expenses_sum_amount)).toLocaleString('en-PH', {
+                                                style: 'currency',
+                                                currency: 'PHP',
+                                            })
                                         }}</span>
                                         <span class="text-xs text-gray-400">{{ format(loan?.loans[0]?.created_at, 'MMM dd, yyyy hh:mm a') }}</span>
                                         <span class="text-xs text-gray-400">{{
@@ -320,16 +333,59 @@ const handleOpenDrawer = (expense: any, item: string) => {
                         <DrawerTitle>{{ drawerData?.name }}</DrawerTitle>
                         <DrawerDescription>
                             <div v-if="drawerItem === 'expense'">
-                                You had spent
-                                {{ Number(drawerData?.expenses_sum_amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
+                                <span class="border-b border-gray-500 dark:border-gray-200"
+                                    >You had spent
+                                    {{
+                                        Number(drawerData?.expenses_sum_amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
+                                    }}</span
+                                >
                             </div>
                             <div v-if="drawerItem === 'wallet'">
-                                You added balance
-                                {{ Number(drawerData?.wallets_sum_amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
+                                <span class="border-b border-gray-500 dark:border-gray-200"
+                                    >You added balance
+                                    {{ Number(drawerData?.wallets_sum_amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}</span
+                                >
+
+                                <span class="mt-3 flex flex-col text-xs text-gray-400">
+                                    <span
+                                        >({{ toFormattedAmount(drawerData.wallets_sum_amount) }} -
+                                        {{ toFormattedAmount(drawerData.expenses_sum_amount) }} =
+                                        <span class="font-bold">{{
+                                            toFormattedAmount(Number(drawerData.wallets_sum_amount) - Number(drawerData.expenses_sum_amount))
+                                        }}</span
+                                        >)</span
+                                    >
+                                    <span></span>
+                                    <span>
+                                        ({{ toFormattedAmount(Number(drawerData.wallets_sum_amount) - Number(drawerData.expenses_sum_amount)) }} +
+                                        {{ toFormattedAmount(drawerData.loans_sum_amount) }}
+                                        <span v-if="drawerData.loans_sum_amount">(from loans)</span> =
+                                        <span class="font-bold">{{
+                                            toFormattedAmount(
+                                                Number(drawerData.wallets_sum_amount) -
+                                                    Number(drawerData.expenses_sum_amount) +
+                                                    Number(drawerData.loans_sum_amount),
+                                            )
+                                        }}</span
+                                        >)</span
+                                    >
+                                </span>
                             </div>
                             <div v-if="drawerItem === 'loan'">
-                                You added loan
-                                {{ Number(drawerData?.loans_sum_amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}
+                                <span class="border-b border-gray-500 dark:border-gray-200"
+                                    >You added loan
+                                    {{ Number(drawerData?.loans_sum_amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) }}</span
+                                >
+                                <span class="mt-3 flex flex-col text-xs text-gray-400">
+                                    <span
+                                        >({{ toFormattedAmount(drawerData.loans_sum_amount) }} -
+                                        {{ toFormattedAmount(drawerData.loan_expenses_sum_amount) }} =
+                                        <span class="font-bold">{{
+                                            toFormattedAmount(Number(drawerData.loans_sum_amount) - Number(drawerData.loan_expenses_sum_amount))
+                                        }}</span
+                                        >)</span
+                                    >
+                                </span>
                             </div>
                         </DrawerDescription>
                     </DrawerHeader>
@@ -337,7 +393,18 @@ const handleOpenDrawer = (expense: any, item: string) => {
                         <div class="my-3 h-[200px] overflow-y-auto px-3">
                             <ul>
                                 <li v-for="(expense, index) in drawerData?.expenses" :key="index" class="grid grid-cols-2 items-center border-b p-2">
-                                    <span>{{ expense.expense_category.name }}</span>
+                                    <span class="flex flex-col">
+                                        <span class="uppercase">{{ expense.expense_category.name }}</span>
+                                        <span class="text-xs text-gray-500 capitalize dark:text-gray-300" v-if="expense.loan_type"
+                                            >Loan type: {{ expense?.loan_type?.name }}</span
+                                        >
+                                        <span class="text-xs text-gray-500 capitalize dark:text-gray-300" v-if="expense.loan"
+                                            >Loan expensed: {{ expense?.loan?.loan_type?.name }}</span
+                                        >
+                                        <span class="text-xs text-gray-500 capitalize dark:text-gray-300" v-if="expense.loan"
+                                            >Loan bank type: {{ expense?.loan?.bank_type?.name }}</span
+                                        >
+                                    </span>
                                     <span class="flex flex-col text-end text-gray-400">
                                         <span class="text-sm">{{
                                             Number(expense.amount).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })
