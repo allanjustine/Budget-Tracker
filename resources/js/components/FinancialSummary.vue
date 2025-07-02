@@ -73,7 +73,7 @@ const chartOptions = {
 </script>
 
 <template>
-    <div class="w-full">
+    <div class="w-full h-full">
         <BarChart :chart-data="chartData" :chart-options="chartOptions" />
     </div>
 </template>
