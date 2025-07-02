@@ -49,7 +49,6 @@ const handleOpenDrawer = (data: any, item: string) => {
     drawerData.value = data;
     drawerItem.value = item;
     isDrawerOpen.value = true;
-    console.log(data);
 };
 
 const toFormattedAmount = (amount: number | string) => {
@@ -61,7 +60,7 @@ const toFormattedAmount = (amount: number | string) => {
     <Head title="Dashboard" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+        <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <div
                     class="relative flex aspect-video items-center justify-end overflow-hidden rounded-xl border border-sidebar-border/70 p-4 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-gray-100 hover:shadow-lg dark:border-sidebar-border hover:dark:bg-gray-900"

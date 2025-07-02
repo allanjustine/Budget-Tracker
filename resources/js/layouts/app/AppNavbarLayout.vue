@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import Button from '@/components/ui/button/Button.vue';
 import { Link } from '@inertiajs/vue3';
 import { HandCoinsIcon, Menu, X } from 'lucide-vue-next';
-import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 const isOpenNavbar = ref(false);
 
@@ -10,38 +9,47 @@ const buttonRef = ref<HTMLButtonElement | undefined>(undefined);
 
 const sidebarRef = ref<HTMLDivElement | undefined>(undefined);
 
+const navbarBg = ref<boolean>(false);
+
 const handleOpenNavBar = () => {
     isOpenNavbar.value = !isOpenNavbar.value;
 };
 
 const handleClickOutside = (e: MouseEvent) => {
     if (buttonRef.value && !buttonRef.value.contains(e.target as Node) && sidebarRef.value && !sidebarRef.value.contains(e.target as Node)) {
-        console.log('click outside');
         isOpenNavbar.value = false;
     }
 };
 
+const handleScroll = () => {
+    if (window.scrollY > 120) {
+        navbarBg.value = true;
+    } else {
+        navbarBg.value = false;
+    }
+};
+
 onMounted(() => {
-    nextTick(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-    });
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('scroll', handleScroll);
 });
 
 onBeforeUnmount(() => {
     document.removeEventListener('mousedown', handleClickOutside);
+    document.removeEventListener('scroll', handleScroll);
 });
 </script>
 
 <template>
     <div class="min-h-screen">
         <!-- Navigation -->
-        <div class="sticky top-0 z-50 bg-white shadow-lg dark:bg-gray-800">
+        <div class="sticky top-0 z-50 transition-all duration-300 ease-in-out" :class="{ 'bg-white shadow-lg dark:bg-gray-900': navbarBg }">
             <div
                 class="absolute z-50 h-screen w-full transition-all duration-300 ease-in-out md:-translate-x-full"
                 :class="{ 'translate-x-0 bg-gray-800/40': isOpenNavbar, '-translate-x-full': !isOpenNavbar }"
             >
-                <X class="absolute top-3 right-18 cursor-pointer text-black dark:text-white" @click="handleOpenNavBar" />
-                <div class="h-screen w-10/12 bg-white p-3 dark:bg-gray-800" ref="sidebarRef">
+                <div class="relative h-screen w-10/12 bg-white p-3 dark:bg-gray-900" ref="sidebarRef">
+                    <X class="absolute top-3 right-5 cursor-pointer text-black dark:text-white" @click="handleOpenNavBar" ref="buttonRef" />
                     <div class="flex flex-col space-y-5 p-5">
                         <Link href="#" class="text-gray-600 transition hover:text-blue-600 dark:text-gray-200 dark:hover:text-blue-600"
                             >Features</Link
@@ -94,9 +102,9 @@ onBeforeUnmount(() => {
                     </div>
                 </div>
                 <div class="block md:hidden" v-if="!isOpenNavbar">
-                    <Button type="button" variant="outline" @click="handleOpenNavBar" ref="buttonRef">
+                    <button type="button" variant="outline" @click="handleOpenNavBar" ref="buttonRef">
                         <Menu v-if="!isOpenNavbar" />
-                    </Button>
+                    </button>
                 </div>
             </nav>
         </div>

@@ -41,6 +41,7 @@ const chartData = {
 
 const chartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
         tooltip: {
             callbacks: {

@@ -22,7 +22,7 @@ const form = useForm({
 
 const submit = () => {
     form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+        onSuccess: () => form.reset('password'),
     });
 };
 </script>
@@ -42,7 +42,6 @@ const submit = () => {
                     <Input
                         id="email"
                         type="email"
-                        required
                         autofocus
                         :tabindex="1"
                         autocomplete="email"
@@ -62,7 +61,6 @@ const submit = () => {
                     <Input
                         id="password"
                         type="password"
-                        required
                         :tabindex="2"
                         autocomplete="current-password"
                         v-model="form.password"
@@ -78,7 +76,7 @@ const submit = () => {
                     </Label>
                 </div>
 
-                <Button type="submit" class="mt-4 w-full" :tabindex="4" :disabled="form.processing">
+                <Button type="submit" class="mt-4 w-full bg-blue-500 text-white hover:bg-blue-600" :tabindex="4" :disabled="form.processing">
                     <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
                     Log in
                 </Button>
