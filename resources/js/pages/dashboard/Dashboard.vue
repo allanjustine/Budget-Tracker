@@ -349,7 +349,8 @@ const toFormattedAmount = (amount: number | string) => {
                                 <span class="mt-3 flex flex-col text-xs text-gray-400">
                                     <span
                                         >({{ toFormattedAmount(drawerData.wallets_sum_amount) }} -
-                                        {{ toFormattedAmount(drawerData.expenses_sum_amount) }} =
+                                        {{ toFormattedAmount(drawerData.expenses_sum_amount) }}
+                                        <span v-if="drawerData.expenses_sum_amount">(from expenses)</span> =
                                         <span class="font-bold">{{
                                             toFormattedAmount(Number(drawerData.wallets_sum_amount) - Number(drawerData.expenses_sum_amount))
                                         }}</span
