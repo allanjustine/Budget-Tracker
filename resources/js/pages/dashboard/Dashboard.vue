@@ -109,9 +109,9 @@ const toFormattedAmount = (amount: number | string) => {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all"> All </SelectItem>
-                                <SelectItem value="card"> Card Only </SelectItem>
-                                <SelectItem value="recent"> Recent Transactions Only </SelectItem>
-                                <SelectItem value="chart"> Chart Only </SelectItem>
+                                <SelectItem value="card"> Financial Items Log </SelectItem>
+                                <SelectItem value="recent"> Recent Transactions </SelectItem>
+                                <SelectItem value="chart"> Financial Summary </SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
