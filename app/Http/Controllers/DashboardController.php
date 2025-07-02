@@ -16,7 +16,7 @@ class DashboardController extends Controller
     private function getWalletChart()
     {
         $walletChart = Wallet::where('user_id', Auth::id())
-            ->latest()
+            ->oldest()
             ->get()
             ->groupBy(['created_at' => fn($wallet) => $wallet->created_at->format('F')])
             ->map(fn($wallet) => $wallet->sum('amount'));
@@ -41,7 +41,7 @@ class DashboardController extends Controller
     private function getExpenseChart()
     {
         $expenseChart = Expense::where('user_id', Auth::id())
-            ->latest()
+            ->oldest()
             ->get()
             ->groupBy(['created_at' => fn($expense) => $expense->created_at->format('F')])
             ->map(fn($expense) => $expense->sum('amount'));
@@ -66,7 +66,7 @@ class DashboardController extends Controller
     private function getLoanChart()
     {
         $loanChart = Loan::where('user_id', Auth::id())
-            ->latest()
+            ->oldest()
             ->get()
             ->groupBy(['created_at' => fn($loan) => $loan->created_at->format('F')])
             ->map(fn($loan) => $loan->sum('amount'));
