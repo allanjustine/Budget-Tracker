@@ -4,7 +4,7 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { BanknoteIcon, ChartBarStacked, HandCoins, Handshake, LayoutGrid, PhilippinePesoIcon, PiggyBank, Wallet2 } from 'lucide-vue-next';
+import { BanknoteIcon, ChartBarStacked, HandCoins, Handshake, LayoutGrid, PhilippinePesoIcon, PiggyBank, Users2, Wallet2 } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const user: any = usePage().props.auth.user;
@@ -56,6 +56,12 @@ const mainNavItems: NavItem[] = [
         title: 'Expense Categories',
         href: '/expense-categories',
         icon: ChartBarStacked,
+        show: user.is_admin,
+    },
+    {
+        title: 'Users',
+        href: '/users',
+        icon: Users2,
         show: user.is_admin,
     },
 ];

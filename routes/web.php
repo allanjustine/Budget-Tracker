@@ -8,6 +8,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseDetailController;
 use App\Http\Controllers\LoanTypeController;
 use App\Http\Controllers\LoanWalletController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -36,6 +37,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(fn() => [
     Route::resource('loan-types', LoanTypeController::class),
 
     Route::resource('expense-categories', ExpenseCategoryController::class),
+
+    Route::resource('users', UserController::class),
 
 ]);
 

@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Inline script to detect system dark mode preference and apply it immediately --}}
     <script>
@@ -39,6 +40,24 @@
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+
+    <meta property="og:title" content="E-Track - Your Personal Expense Tracker" />
+    <meta property="og:description"
+        content="Track expenses, manage loans, and monitor your financial health all in one place. Try E-Track today!" />
+    <meta property="og:image" content="{{ asset('assets/meta-image.png') }}" />
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="E-Track - Your Personal Expense Tracker" />
+    <meta name="twitter:description"
+        content="Track expenses, manage loans, and monitor your financial health all in one place." />
+    <meta name="twitter:image" content="{{ asset('assets/meta-image.png') }}" />
+
+    <meta name="description"
+        content="Track expenses, manage loans, and monitor your financial health all in one place." />
+    <meta name="author" content="Allan Justine Mascarinñas" />
+
 
     @routes
     @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
