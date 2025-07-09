@@ -18,8 +18,8 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
 import { format } from 'date-fns';
-import { LoaderCircle, Pen, PenBoxIcon, Plus, TrashIcon } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { CheckCircle, LoaderCircle, Pen, PenBoxIcon, Plus, TrashIcon } from 'lucide-vue-next';
+import { h, ref } from 'vue';
 import { toast } from 'vue-sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -57,6 +57,7 @@ function submit() {
             toast('Created!', {
                 description: success,
                 duration: 3000,
+                icon: h(CheckCircle, { className: 'text-green-500 w-5 h-5' }),
             });
 
             form.reset();
@@ -75,6 +76,7 @@ const deleteExpenseDetail = (id: number) => {
                 description: success,
                 duration: 3000,
                 position: 'bottom-center',
+                icon: h(CheckCircle, { className: 'text-green-500 w-5 h-5' }),
             });
 
             deleteAlertDialogOpen.value = false;
@@ -99,6 +101,7 @@ const handleUpdate = () => {
                 description: success,
                 duration: 3000,
                 position: 'bottom-center',
+                icon: h(CheckCircle, { className: 'text-green-500 w-5 h-5' }),
             });
 
             form.reset();
