@@ -64,7 +64,7 @@ function submit() {
                 description: success,
                 duration: 3000,
                 position: 'bottom-center',
-                icon: h(CheckCircle, { className: 'text-green-500 w-5 h-5' }),
+                icon: h(CheckCircle, { class: 'text-green-500 w-5 h-5' }),
             });
 
             form.reset();
@@ -83,7 +83,7 @@ const deleteLoanWallet = (id: number) => {
                 description: success,
                 duration: 3000,
                 position: 'bottom-center',
-                icon: h(CheckCircle, { className: 'text-green-500 w-5 h-5' }),
+                icon: h(CheckCircle, { class: 'text-green-500 w-5 h-5' }),
             });
 
             deleteAlertDialogOpen.value = false;
@@ -110,7 +110,7 @@ const handleUpdate = () => {
                 description: success,
                 duration: 3000,
                 position: 'bottom-center',
-                icon: h(CheckCircle, { className: 'text-green-500 w-5 h-5' }),
+                icon: h(CheckCircle, { class: 'text-green-500 w-5 h-5' }),
             });
 
             form.reset();
