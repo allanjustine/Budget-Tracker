@@ -11,14 +11,16 @@ import { HandCoinsIcon } from 'lucide-vue-next';
     <section class="container mx-auto px-6 py-20">
         <div class="flex flex-col items-center gap-12 md:flex-row">
             <div class="md:w-1/2">
-                <Badge variant="outline" class="mb-4 border-blue-200 bg-blue-100 p-2 rounded text-blue-600">New Feature</Badge>
-                <h1 class="mb-6 text-5xl leading-tight font-bold text-gray-600 dark:text-gray-200">Take Control of Your <span class="text-blue-600">Finances</span></h1>
+                <Badge variant="outline" class="mb-4 rounded border-blue-200 bg-blue-100 p-2 text-blue-600">New Feature</Badge>
+                <h1 class="mb-6 text-5xl leading-tight font-bold text-gray-600 dark:text-gray-200">
+                    Take Control of Your <span class="text-blue-600">Finances</span>
+                </h1>
                 <p class="mb-8 text-xl text-gray-500 dark:text-gray-400">
-                    E-Track helps you manage your expenses effortlessly with beautiful insights and powerful analytics.
+                    Budget tracking helps you stay on top of your spending so you can reach your goals without the stress.
                 </p>
                 <div class="flex space-x-4">
                     <Button class="bg-blue-600 px-8 py-6 text-lg text-white hover:bg-blue-700">Get Started</Button>
-                    <Button variant="outline" class="border-gray-300 px-8 py-6 text-lg text-gray-600 dark:text-gray-300 hover:bg-gray-50">
+                    <Button variant="outline" class="border-gray-300 px-8 py-6 text-lg text-gray-600 hover:bg-gray-50 dark:text-gray-300">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -38,9 +40,9 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                 </div>
             </div>
             <div class="md:w-1/2">
-                <Card class="border-0 bg-blue-600/80 dark:bg-blue-900/80 shadow-xl">
+                <Card class="border-0 bg-blue-600/80 shadow-xl dark:bg-blue-900/80">
                     <CardHeader>
-                        <CardTitle class="text-xl dark:text-gray-300 text-gray-200">Expense Dashboard</CardTitle>
+                        <CardTitle class="text-xl text-gray-200 dark:text-gray-300">Expense Dashboard</CardTitle>
                         <CardDescription class="text-gray-300">Your monthly spending overview</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -75,13 +77,19 @@ import { HandCoinsIcon } from 'lucide-vue-next';
     <section class="py-20">
         <div class="container mx-auto px-6">
             <div class="mb-16 text-center">
-                <Badge variant="outline" class="mb-4 dark:border-blue-900 dark:bg-blue-900 dark:text-white border-blue-200 bg-blue-50 text-blue-600 p-2 rounded">Features</Badge>
-                <h2 class="mb-4 text-4xl font-bold dark:text-gray-300 text-gray-900">Powerful Expense Tracking</h2>
-                <p class="mx-auto max-w-2xl text-xl dark:text-gray-200 text-gray-600">Everything you need to manage your finances in one beautiful interface</p>
+                <Badge
+                    variant="outline"
+                    class="mb-4 rounded border-blue-200 bg-blue-50 p-2 text-blue-600 dark:border-blue-900 dark:bg-blue-900 dark:text-white"
+                    >Features</Badge
+                >
+                <h2 class="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-300">Powerful Expense Tracking</h2>
+                <p class="mx-auto max-w-2xl text-xl text-gray-600 dark:text-gray-200">
+                    Everything you need to manage your finances in one beautiful interface
+                </p>
             </div>
 
             <div class="grid gap-8 md:grid-cols-3">
-                <Card class="border-0 dark:bg-blue-900/80 bg-blue-600/80 transition duration-300 hover:shadow-lg">
+                <Card class="border-0 bg-blue-600/80 transition duration-300 hover:shadow-lg dark:bg-blue-900/80">
                     <CardHeader>
                         <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
                             <svg
@@ -102,22 +110,22 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                                 <path d="M16 16h5v5"></path>
                             </svg>
                         </div>
-                        <CardTitle class="dark:text-gray-200 text-gray-100">Real-time Sync</CardTitle>
+                        <CardTitle class="text-gray-100 dark:text-gray-200">Real-time Sync</CardTitle>
                         <CardDescription class="text-gray-200 dark:text-gray-300">All your devices updated instantly</CardDescription>
                     </CardHeader>
                 </Card>
 
-                <Card class="border-0 dark:bg-blue-900/80 bg-blue-600/80 transition duration-300 hover:shadow-lg">
+                <Card class="border-0 bg-blue-600/80 transition duration-300 hover:shadow-lg dark:bg-blue-900/80">
                     <CardHeader>
                         <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
                             <HandCoinsIcon class="text-blue-500" />
                         </div>
-                        <CardTitle class="dark:text-gray-200 text-gray-100">Smart Budgeting</CardTitle>
+                        <CardTitle class="text-gray-100 dark:text-gray-200">Smart Budgeting</CardTitle>
                         <CardDescription class="text-gray-200 dark:text-gray-300">Automated budget recommendations</CardDescription>
                     </CardHeader>
                 </Card>
 
-                <Card class="border-0 dark:bg-blue-900/80 bg-blue-600/80 transition duration-300 hover:shadow-lg">
+                <Card class="border-0 bg-blue-600/80 transition duration-300 hover:shadow-lg dark:bg-blue-900/80">
                     <CardHeader>
                         <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
                             <svg
@@ -135,7 +143,7 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                                 <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
                             </svg>
                         </div>
-                        <CardTitle class="dark:text-gray-200 text-gray-100">Detailed Reports</CardTitle>
+                        <CardTitle class="text-gray-100 dark:text-gray-200">Detailed Reports</CardTitle>
                         <CardDescription class="text-gray-200 dark:text-gray-300">Beautiful visualizations of your spending</CardDescription>
                     </CardHeader>
                 </Card>
@@ -147,9 +155,15 @@ import { HandCoinsIcon } from 'lucide-vue-next';
     <section class="py-20">
         <div class="container mx-auto px-6">
             <div class="mb-16 text-center">
-                <Badge variant="outline" class="mb-4 dark:border-blue-800 border-blue-200 dark:bg-blue-900 p-2 dark:text-white rounded bg-blue-50 text-blue-600">Testimonials</Badge>
+                <Badge
+                    variant="outline"
+                    class="mb-4 rounded border-blue-200 bg-blue-50 p-2 text-blue-600 dark:border-blue-800 dark:bg-blue-900 dark:text-white"
+                    >Testimonials</Badge
+                >
                 <h2 class="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-200">Trusted by Thousands</h2>
-                <p class="mx-auto max-w-2xl text-xl text-gray-600 dark:text-gray-300">Join our community of happy users who transformed their finances</p>
+                <p class="mx-auto max-w-2xl text-xl text-gray-600 dark:text-gray-300">
+                    Join our community of happy users who transformed their finances
+                </p>
             </div>
 
             <div class="grid gap-8 md:grid-cols-3">
@@ -166,7 +180,7 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                             </div>
                         </div>
                         <p class="text-gray-300">
-                            "E-Track helped me save 30% more each month without feeling restricted. The insights are incredibly valuable!"
+                            "Budget Tracker helped me save 30% more each month without feeling restricted. The insights are incredibly valuable!"
                         </p>
                     </CardContent>
                 </Card>
@@ -184,7 +198,7 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                             </div>
                         </div>
                         <p class="text-gray-300">
-                            "As a freelancer, tracking expenses was chaotic. E-Track simplified everything with its beautiful interface."
+                            "Tracking your budget is like giving your money a plan, making it easier to save, spend wisely, and enjoy peace of mind."
                         </p>
                     </CardContent>
                 </Card>
@@ -202,7 +216,8 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                             </div>
                         </div>
                         <p class="text-gray-300">
-                            "The reporting features saved me hours each month. Now I can focus on growing my business instead of spreadsheets."
+                            "Budget tracking lets you see exactly where your money goes, helping you stay in control and feel confident about your
+                            finances."
                         </p>
                     </CardContent>
                 </Card>
@@ -211,14 +226,20 @@ import { HandCoinsIcon } from 'lucide-vue-next';
     </section>
 
     <!-- CTA Section -->
-    <section class="bg-blue-600 dark:bg-blue-800 py-20 text-white">
+    <section class="bg-blue-600 py-20 text-white dark:bg-blue-800">
         <div class="container mx-auto px-6 text-center">
             <h2 class="mb-6 text-4xl font-bold">Ready to Transform Your Finances?</h2>
-            <p class="mx-auto mb-8 max-w-2xl text-xl opacity-90">Join thousands of users who took control of their spending with E-Track</p>
+            <p class="mx-auto mb-8 max-w-2xl text-xl opacity-90">
+                Join thousands of users who took control of their finances with smarter budgeting.
+            </p>
             <div class="flex justify-center space-x-4">
                 <Link href="/login"><Button class="bg-white px-8 py-6 text-lg text-blue-600 hover:bg-gray-100">Get Started</Button> </Link>
                 <Link href="#">
-                    <Button variant="outline" class="border-white px-8 py-6 text-lg text-white hover:text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">Learn More</Button>
+                    <Button
+                        variant="outline"
+                        class="border-white bg-blue-600 px-8 py-6 text-lg text-white hover:bg-blue-700 hover:text-white dark:bg-blue-500 dark:hover:bg-blue-600"
+                        >Learn More</Button
+                    >
                 </Link>
             </div>
         </div>

@@ -7,6 +7,6 @@ import { HandCoinsIcon } from 'lucide-vue-next';
         <HandCoinsIcon class="h-8 w-8 text-blue-500" />
     </div>
     <div class="ml-1 grid flex-1 text-left text-sm">
-        <span class="mb-0.5 truncate leading-tight font-semibold">E-Track</span>
+        <span class="mb-0.5 truncate leading-tight font-semibold">Budget Tracker</span>
     </div>
 </template>

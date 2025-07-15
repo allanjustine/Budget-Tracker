@@ -81,7 +81,7 @@ onBeforeUnmount(() => {
             <nav class="container mx-auto flex items-center justify-between px-6 py-6">
                 <div class="flex items-center space-x-2">
                     <HandCoinsIcon class="h-8 w-8 text-blue-500" />
-                    <span class="text-xl font-bold text-blue-600">E-Track</span>
+                    <span class="text-xl font-bold text-blue-600">Budget Tracker</span>
                 </div>
                 <div class="hidden md:block">
                     <div class="flex items-center space-x-6">

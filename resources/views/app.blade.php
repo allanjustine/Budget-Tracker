@@ -32,7 +32,7 @@
         }
     </style>
 
-    <title inertia>{{ config('app.name', 'E-Track') }}</title>
+    <title inertia>{{ config('app.name', 'Budget Tracker') }}</title>
 
     <link rel="icon" href="/favicon.ico?v2" sizes="any">
     <link rel="icon" href="/favicon.svg?v2" type="image/svg+xml">
@@ -41,15 +41,15 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
-    <meta property="og:title" content="E-Track - Your Personal Expense Tracker" />
+    <meta property="og:title" content="Budget Tracker - Your Personal Budget Tracker" />
     <meta property="og:description"
-        content="Track expenses, manage loans, and monitor your financial health all in one place. Try E-Track today!" />
+        content="Track budget, expenses, manage loans, and monitor your financial health all in one place. Try Budget Tracker today!" />
     <meta property="og:image" content="{{ asset('assets/meta-image.png') }}" />
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="E-Track - Your Personal Expense Tracker" />
+    <meta name="twitter:title" content="Budget Tracker - Your Personal Budget Tracker" />
     <meta name="twitter:description"
         content="Track expenses, manage loans, and monitor your financial health all in one place." />
     <meta name="twitter:image" content="{{ asset('assets/meta-image.png') }}" />

@@ -12,7 +12,7 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                 <div>
                     <div class="mb-4 flex items-center space-x-2">
                         <HandCoinsIcon class="h-8 w-8 text-blue-500" />
-                        <span class="text-xl font-bold">E-Track</span>
+                        <span class="text-xl font-bold">Budget Tracker</span>
                     </div>
                     <p class="text-gray-400">Beautiful expense tracking for everyone. Take control of your finances today.</p>
                 </div>
@@ -44,7 +44,7 @@ import { HandCoinsIcon } from 'lucide-vue-next';
                 </div>
             </div>
             <div class="mt-12 border-t border-gray-800 pt-8 text-center text-gray-400">
-                <p>© {{ new Date().getFullYear() }} E-Track. All rights reserved.</p>
+                <p>© {{ new Date().getFullYear() }} Budget Tracker. All rights reserved.</p>
             </div>
         </div>
     </footer>
