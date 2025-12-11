@@ -57,7 +57,7 @@
 
     <meta name="description"
         content="Track expenses, manage loans, and monitor your financial health all in one place." />
-    <meta name="author" content="Allan Justine Mascarinñas" />
+    <meta name="author" content="Allan Justine Mascariñas" />
 
 
     @routes
